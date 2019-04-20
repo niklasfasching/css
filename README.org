@@ -1,0 +1,19 @@
+* css selectors for go [[https://travis-ci.org/niklasfasching/css.svg?branch=master]]
+Yet another package implementing a css selector compiler for go - see e.g. [[https://github.com/ericchiang/css/][github.com/ericchiang/css]] and [[https://github.com/andybalholm/cascadia][github.com/andybalholm/cascadia]] for prior art.
+** but why?
+for fun - don't use this!
+
+- It seemed easy enough to do
+- I've been really into writing parsers lately and this felt a belt more complicated than a lisp
+- I enjoy web scraping and wanted to learn more about underlying concepts
+* todo
+- ignore lower/uppercase
+- escape handling (string/ident)
+- investigate right-to-left matching (fb55)
+- implement pseudo class selectors
+- implement pseudo function selectors
+* resources
+- https://github.com/andybalholm/cascadia
+- https://github.com/ericchiang/css
+- https://github.com/fb55/css-select
+- [[https://webcache.googleusercontent.com/search?q=cache:OaB_kAprZssJ:https://www.w3.org/TR/2018/CR-selectors-3-20180130/][https://www.w3.org/TR/2018/CR-selectors-3-20180130/]]

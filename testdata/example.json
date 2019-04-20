@@ -1,0 +1,101 @@
+{
+  "Selectors": {
+    ".pear, .apple": {
+      "SelectorA": {
+        "Selectors": [
+          {
+            "Class": "pear"
+          }
+        ]
+      },
+      "SelectorB": {
+        "Selectors": [
+          {
+            "Class": "apple"
+          }
+        ]
+      }
+    },
+    "ul": {
+      "Selectors": [
+        {
+          "Element": "ul"
+        }
+      ]
+    },
+    "ul *.pear": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Element": "ul"
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Element": "*"
+          },
+          {
+            "Class": "pear"
+          }
+        ]
+      },
+      "Direct": false
+    },
+    "ul .pear": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Element": "ul"
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Class": "pear"
+          }
+        ]
+      },
+      "Direct": false
+    },
+    "ul li": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Element": "ul"
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Element": "li"
+          }
+        ]
+      },
+      "Direct": false
+    }
+  },
+  "Selections": {
+    ".pear, .apple": [
+      "<li class=\"apple\">Apple</li>",
+      "<li class=\"pear\">Pear</li>"
+    ],
+    "ul": [
+      "<ul id=\"fruits\">\n      <li class=\"apple\">Apple</li>\n      <li class=\"orange\">Orange</li>\n      <li class=\"pear\">Pear</li>\n    </ul>"
+    ],
+    "ul *.pear": [
+      "<li class=\"pear\">Pear</li>"
+    ],
+    "ul .pear": [
+      "<li class=\"pear\">Pear</li>"
+    ],
+    "ul li": [
+      "<li class=\"apple\">Apple</li>",
+      "<li class=\"orange\">Orange</li>",
+      "<li class=\"pear\">Pear</li>"
+    ]
+  }
+}
