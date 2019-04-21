@@ -4,14 +4,18 @@
       "SelectorA": {
         "Selectors": [
           {
-            "Class": "pear"
+            "Key": "class",
+            "Value": "pear",
+            "Type": "~="
           }
         ]
       },
       "SelectorB": {
         "Selectors": [
           {
-            "Class": "apple"
+            "Key": "class",
+            "Value": "apple",
+            "Type": "~="
           }
         ]
       }
@@ -37,7 +41,9 @@
             "Element": "*"
           },
           {
-            "Class": "pear"
+            "Key": "class",
+            "Value": "pear",
+            "Type": "~="
           }
         ]
       },
@@ -54,7 +60,9 @@
       "Selector": {
         "Selectors": [
           {
-            "Class": "pear"
+            "Key": "class",
+            "Value": "pear",
+            "Type": "~="
           }
         ]
       },

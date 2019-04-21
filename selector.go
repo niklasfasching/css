@@ -28,10 +28,6 @@ type ElementSelector struct {
 	Element string
 }
 
-type ClassSelector struct {
-	Class string
-}
-
 type SelectorSequence struct {
 	Selectors []Selector
 }
@@ -128,16 +124,6 @@ func (s *AttributeSelector) Match(n *html.Node) bool {
 	default:
 		panic("invalid match type for attribute selector: " + s.Type)
 	}
-}
-
-func (s *ClassSelector) Match(n *html.Node) bool {
-	classes, _ := getAttribute(n, "class")
-	for _, class := range strings.Fields(classes) {
-		if s.Class == class {
-			return true
-		}
-	}
-	return false
 }
 
 func (s *SelectorSequence) Match(n *html.Node) bool {

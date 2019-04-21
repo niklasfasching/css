@@ -69,7 +69,8 @@ loop:
 	for {
 		switch p.peek().category {
 		case tokenClass:
-			s.Selectors = append(s.Selectors, &ClassSelector{p.next().string})
+			class := strings.ToLower(p.next().string)
+			s.Selectors = append(s.Selectors, &AttributeSelector{"class", class, "~="})
 		case tokenID:
 			key := strings.ToLower(p.next().string)
 			s.Selectors = append(s.Selectors, &AttributeSelector{"id", key, "="})
