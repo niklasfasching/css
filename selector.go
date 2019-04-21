@@ -100,6 +100,9 @@ func (s *ElementSelector) Match(n *html.Node) bool {
 }
 
 func (s *AttributeSelector) Match(n *html.Node) bool {
+	if n.Type != html.ElementNode {
+		return false
+	}
 	value, exists := getAttribute(n, s.Key)
 	switch s.Type {
 	case "~=":
