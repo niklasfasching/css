@@ -3,6 +3,7 @@ package css
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type parser struct {
@@ -59,7 +60,8 @@ func (p *parser) parseSimpleSelectorSequence() (Selector, error) {
 	s := SelectorSequence{}
 	switch p.peek().category {
 	case tokenIdent:
-		s.Selectors = append(s.Selectors, &ElementSelector{p.next().string})
+		element := strings.ToLower(p.next().string)
+		s.Selectors = append(s.Selectors, &ElementSelector{element})
 	case tokenUniversal:
 		s.Selectors = append(s.Selectors, &UniversalSelector{p.next().string})
 	}
@@ -69,7 +71,8 @@ loop:
 		case tokenClass:
 			s.Selectors = append(s.Selectors, &ClassSelector{p.next().string})
 		case tokenID:
-			s.Selectors = append(s.Selectors, &AttributeSelector{"id", p.next().string, "="})
+			key := strings.ToLower(p.next().string)
+			s.Selectors = append(s.Selectors, &AttributeSelector{"id", key, "="})
 		case tokenBracketOpen:
 			as, err := p.parseAttributeSelector()
 			if err != nil {
@@ -128,7 +131,7 @@ func (p *parser) parseAttributeSelector() (Selector, error) {
 	if t.category != tokenIdent {
 		return nil, errors.New("invalid attribute selector")
 	}
-	key, matcher := t.string, p.parseMatcher()
+	key, matcher := strings.ToLower(t.string), p.parseMatcher()
 	if t := p.next(); matcher == "" && t.category == tokenBracketClose {
 		return &AttributeSelector{key, "", ""}, nil
 	} else if t.category == tokenString || t.category == tokenIdent {
