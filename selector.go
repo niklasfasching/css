@@ -104,12 +104,26 @@ func (s *ElementSelector) Match(n *html.Node) bool {
 }
 
 func (s *AttributeSelector) Match(n *html.Node) bool {
+	value, exists := getAttribute(n, s.Key)
 	switch s.Type {
+	case "~=":
+		for _, v := range strings.Fields(value) {
+			if s.Value == v {
+				return true
+			}
+		}
+		return false
+	case "|=":
+		return s.Value == value || strings.HasPrefix(value, s.Value+"-")
+	case "^=":
+		return strings.HasPrefix(value, s.Value)
+	case "$=":
+		return strings.HasSuffix(value, s.Value)
+	case "*=":
+		return strings.Contains(value, s.Value)
 	case "=":
-		value, _ := getAttribute(n, s.Key)
 		return s.Value == value
 	case "":
-		_, exists := getAttribute(n, s.Key)
 		return exists
 	default:
 		panic("invalid match type for attribute selector: " + s.Type)
