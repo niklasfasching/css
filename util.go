@@ -13,6 +13,27 @@ func getAttribute(n *html.Node, key string) (string, bool) {
 	return "", false
 }
 
-func negatedMatch(f func(*html.Node) bool) func(*html.Node) bool {
-	return func(n *html.Node) bool { return !f(n) }
+func hasAttribute(n *html.Node, key string) bool {
+	_, exists := getAttribute(n, key)
+	return exists
+}
+
+func isEmpty(n *html.Node) bool {
+	if n.Type != html.ElementNode {
+		return false
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if c.Type == html.ElementNode || c.Type == html.TextNode {
+			return false
+		}
+	}
+	return true
+}
+
+func isInput(n *html.Node) bool {
+	return n.Type == html.ElementNode && (n.Data == "input" || n.Data == "textarea")
+}
+
+func isRoot(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Parent != nil && n.Parent.Type == html.DocumentNode
 }

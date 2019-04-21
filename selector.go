@@ -50,35 +50,21 @@ type UnionSelector struct {
 }
 
 var PseudoClasses = map[string]func(*html.Node) bool{
-	"checked":       (&AttributeSelector{"checked", "", ""}).Match,
-	"disabled":      (&AttributeSelector{"disabled", "", ""}).Match,
-	"empty":         nil,
-	"enabled":       negatedMatch((&AttributeSelector{"disabled", "", ""}).Match),
-	"first":         nil,
+	"root":          isRoot,
+	"empty":         isEmpty,
+	"checked":       func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "checked") },
+	"disabled":      func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "disabled") },
+	"enabled":       func(n *html.Node) bool { return isInput(n) && !hasAttribute(n, "disabled") },
+	"optional":      func(n *html.Node) bool { return isInput(n) && !hasAttribute(n, "required") },
+	"required":      func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "required") },
+	"read-only":     func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "readonly") },
+	"read-write":    func(n *html.Node) bool { return isInput(n) && !hasAttribute(n, "readonly") },
 	"first-child":   nil,
 	"first-of-type": nil,
-	"fullscreen":    nil,
-	"focus":         nil,
-	"hover":         nil,
-	"indeterminate": nil,
-	"in-range":      nil,
-	"invalid":       nil,
 	"last-child":    nil,
 	"last-of-type":  nil,
-	"left":          nil,
-	"link":          nil,
-	"only-child":    nil,
-	"only-of-type":  nil,
-	"optional":      nil,
-	"out-of-range":  nil,
-	"read-only":     nil,
-	"read-write":    nil,
-	"required":      nil,
-	"right":         nil,
-	"root":          nil,
-	"scope":         nil,
-	"target":        nil,
-	"valid":         nil,
+	"only-child":    nil, // same as :first-child:last-child or :nth-child(1):nth-last-child(1)
+	"only-of-type":  nil, // same as :first-of-type:last-of-type or :nth-of-type(1):nth-of-type(1)
 }
 
 var PseudoFunctions = map[string]func(*html.Node) bool{

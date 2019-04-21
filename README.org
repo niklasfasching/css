@@ -7,10 +7,8 @@ for fun - don't use this!
 - I've been really into writing parsers lately and this felt a belt more complicated than a lisp
 - I enjoy web scraping and wanted to learn more about underlying concepts
 * todo
-- ignore lower/uppercase
 - escape handling (string/ident)
 - investigate right-to-left matching (fb55)
-- implement pseudo class selectors
 - implement pseudo function selectors
 * resources
 - https://github.com/andybalholm/cascadia
