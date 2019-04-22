@@ -36,12 +36,15 @@ func First(s Selector, n *html.Node) *html.Node {
 }
 
 func All(s Selector, n *html.Node) []*html.Node {
-	var ns []*html.Node
+	return all(s, n, nil)
+}
+
+func all(s Selector, n *html.Node, ns []*html.Node) []*html.Node {
 	if s.Match(n) {
 		ns = append(ns, n)
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		ns = append(ns, All(s, c)...)
+		ns = all(s, c, ns)
 	}
 	return ns
 }
