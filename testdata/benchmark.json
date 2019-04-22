@@ -46,8 +46,7 @@
             "Type": "~="
           }
         ]
-      },
-      "Direct": false
+      }
     },
     "ul .pear": {
       "Ancestor": {
@@ -65,8 +64,7 @@
             "Type": "~="
           }
         ]
-      },
-      "Direct": false
+      }
     },
     "ul li": {
       "Ancestor": {
@@ -82,8 +80,7 @@
             "Element": "li"
           }
         ]
-      },
-      "Direct": false
+      }
     }
   },
   "Selections": {

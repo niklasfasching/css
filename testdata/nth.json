@@ -136,8 +136,7 @@
             "Args": "(li:nth-child(even))"
           }
         ]
-      },
-      "Direct": false
+      }
     }
   },
   "Selections": {

@@ -110,13 +110,13 @@ func (p *parser) parseComplexSelectorSequence(s1 Selector) (Selector, error) {
 	}
 	switch combinator {
 	case " ":
-		return &DescendantSelector{s1, s2, false}, nil
+		return &DescendantSelector{s1, s2}, nil
 	case ">":
-		return &DescendantSelector{s1, s2, true}, nil
+		return &ChildSelector{s1, s2}, nil
 	case "+":
-		return &SiblingSelector{s1, s2, false}, nil
+		return &NextSiblingSelector{s1, s2}, nil
 	case "~":
-		return &SiblingSelector{s1, s2, true}, nil
+		return &SubsequentSiblingSelector{s1, s2}, nil
 	case ",":
 		return &UnionSelector{s1, s2}, nil
 	default:

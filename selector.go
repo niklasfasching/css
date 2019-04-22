@@ -43,13 +43,21 @@ type SelectorSequence struct {
 type DescendantSelector struct {
 	Ancestor Selector
 	Selector Selector
-	Direct   bool
 }
 
-type SiblingSelector struct {
-	Sibling   Selector
-	Selector  Selector
-	Immediate bool
+type ChildSelector struct {
+	Parent   Selector
+	Selector Selector
+}
+
+type NextSiblingSelector struct {
+	Sibling  Selector
+	Selector Selector
+}
+
+type SubsequentSiblingSelector struct {
+	Sibling  Selector
+	Selector Selector
 }
 
 type UnionSelector struct {
@@ -142,7 +150,7 @@ func (s *SelectorSequence) Match(n *html.Node) bool {
 
 func (s *DescendantSelector) Match(n *html.Node) bool {
 	if s.Selector.Match(n) {
-		for n, direct := n.Parent, true; n != nil && (!s.Direct || direct); n, direct = n.Parent, false {
+		for n := n.Parent; n != nil; n = n.Parent {
 			if s.Ancestor.Match(n) {
 				return true
 			}
@@ -151,15 +159,23 @@ func (s *DescendantSelector) Match(n *html.Node) bool {
 	return false
 }
 
-func (s *SiblingSelector) Match(n *html.Node) bool {
+func (s *ChildSelector) Match(n *html.Node) bool {
+	return s.Selector.Match(n) && n.Parent != nil && s.Parent.Match(n.Parent)
+}
+
+func (s *SubsequentSiblingSelector) Match(n *html.Node) bool {
 	if s.Selector.Match(n) {
-		for n, immediate := n.PrevSibling, true; n != nil && (!s.Immediate || immediate); n, immediate = n.PrevSibling, false {
+		for n := n.PrevSibling; n != nil; n = n.PrevSibling {
 			if s.Sibling.Match(n) {
 				return true
 			}
 		}
 	}
 	return false
+}
+
+func (s *NextSiblingSelector) Match(n *html.Node) bool {
+	return s.Selector.Match(n) && n.PrevSibling != nil && s.Sibling.Match(n.PrevSibling)
 }
 
 func (s *UnionSelector) Match(n *html.Node) bool {
