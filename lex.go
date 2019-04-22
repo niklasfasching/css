@@ -184,6 +184,24 @@ func acceptIdentifier(l *lexer) error {
 	return nil
 }
 
+func acceptString(l *lexer) error {
+	quote := l.next()
+	if !strings.ContainsRune(`'"`, quote) {
+		return fmt.Errorf("invalid quoting char for string: %s", string(quote))
+	}
+	for r := l.next(); r != quote; r = l.next() {
+		switch {
+		case r == eof:
+			return fmt.Errorf("unterminated quoted string")
+		case r == '\n', r == '\r', r == '\f':
+			return fmt.Errorf("unescaped %q", string(r))
+		case r == '\\':
+			l.next()
+		}
+	}
+	return nil
+}
+
 func lexClass(l *lexer) stateFn {
 	err := acceptIdentifier(l)
 	if err != nil {
@@ -194,20 +212,11 @@ func lexClass(l *lexer) stateFn {
 }
 
 func lexString(l *lexer) stateFn {
-	quote := l.next()
-	l.ignore()
-	for {
-		switch r := l.next(); {
-		case r == eof:
-			return l.errorf("invalid unterminated string: %s", string(quote))
-		case r == quote:
-			l.backup()
-			l.emit(tokenString)
-			l.next()
-			l.ignore()
-			return lexSpace
-		}
+	if err := acceptString(l); err != nil {
+		l.errorf("%s", err)
 	}
+	l.emit(tokenString)
+	return lexSpace
 }
 
 func lexID(l *lexer) stateFn {

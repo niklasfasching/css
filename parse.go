@@ -137,7 +137,11 @@ func (p *parser) parseAttributeSelector() (Selector, error) {
 		return &AttributeSelector{key, "", ""}, nil
 	} else if t.category == tokenString || t.category == tokenIdent {
 		if p.next().category == tokenBracketClose {
-			return &AttributeSelector{key, t.string, matcher}, nil
+			value := t.string
+			if t.category == tokenString {
+				value = value[1 : len(value)-2]
+			}
+			return &AttributeSelector{key, value, matcher}, nil
 		}
 	}
 	return nil, errors.New("invalid attribute selector")
