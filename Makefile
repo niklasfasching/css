@@ -4,7 +4,7 @@ update-test-data:
 
 .PHONY: build
 build:
-	go get -u ./...
+	go get -u -t ./...
 	go build
 
 .PHONY: test
