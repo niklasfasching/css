@@ -120,8 +120,8 @@ func (s *AttributeSelector) Match(n *html.Node) bool {
 }
 
 func (s *SelectorSequence) Match(n *html.Node) bool {
-	for _, cs := range s.Selectors {
-		if !cs.Match(n) {
+	for i := len(s.Selectors) - 1; i >= 0; i-- {
+		if !s.Selectors[i].Match(n) {
 			return false
 		}
 	}
