@@ -70,10 +70,10 @@ loop:
 		switch p.peek().category {
 		case tokenClass:
 			class := strings.ToLower(p.next().string)
-			s.Selectors = append(s.Selectors, &AttributeSelector{"class", class, "~="})
+			s.Selectors = append(s.Selectors, attributeSelector("class", class, "~="))
 		case tokenID:
-			key := strings.ToLower(p.next().string)
-			s.Selectors = append(s.Selectors, &AttributeSelector{"id", key, "="})
+			id := strings.ToLower(p.next().string)
+			s.Selectors = append(s.Selectors, attributeSelector("id", id, "="))
 		case tokenBracketOpen:
 			as, err := p.parseAttributeSelector()
 			if err != nil {
@@ -134,14 +134,14 @@ func (p *parser) parseAttributeSelector() (Selector, error) {
 	}
 	key, matcher := strings.ToLower(t.string), p.parseMatcher()
 	if t := p.next(); matcher == "" && t.category == tokenBracketClose {
-		return &AttributeSelector{key, "", ""}, nil
+		return attributeSelector(key, "", ""), nil
 	} else if t.category == tokenString || t.category == tokenIdent {
 		if p.next().category == tokenBracketClose {
 			value := t.string
 			if t.category == tokenString {
 				value = value[1 : len(value)-2]
 			}
-			return &AttributeSelector{key, value, matcher}, nil
+			return attributeSelector(key, value, matcher), nil
 		}
 	}
 	return nil, errors.New("invalid attribute selector")

@@ -96,20 +96,45 @@ func isNth(a, b, anb int) bool {
 	return (a == 0 && b == anb) || (a != 0 && an/a >= 0 && an%a == 0)
 }
 
-func getAttribute(n *html.Node, key string) (string, bool) {
+func hasAttribute(n *html.Node, key string) bool {
 	for _, a := range n.Attr {
 		if a.Key == key {
-			return a.Val, true
+			return true
 		}
 	}
-	return "", false
-}
-
-func hasAttribute(n *html.Node, key string) bool {
-	_, exists := getAttribute(n, key)
-	return exists
+	return false
 }
 
 func combine(a, b func(*html.Node) bool) func(*html.Node) bool {
 	return func(n *html.Node) bool { return a(n) && b(n) }
+}
+
+func attributeSelector(key, value, kind string) Selector {
+	s := AttributeSelector{key, value, kind, nil}
+	switch kind {
+	case "~=":
+		s.match = func(value string) bool {
+			for _, v := range strings.Fields(value) {
+				if s.Value == v {
+					return true
+				}
+			}
+			return false
+		}
+	case "|=":
+		s.match = func(value string) bool { return s.Value == value || strings.HasPrefix(value, s.Value+"-") }
+	case "^=":
+		s.match = func(value string) bool { return strings.HasPrefix(value, s.Value) }
+	case "$=":
+		s.match = func(value string) bool { return strings.HasSuffix(value, s.Value) }
+	case "*=":
+		s.match = func(value string) bool { return strings.Contains(value, s.Value) }
+	case "=":
+		s.match = func(value string) bool { return s.Value == value }
+	case "":
+		s.match = func(value string) bool { return true }
+	default:
+		panic("invalid match type for attribute selector: " + s.Type)
+	}
+	return &s
 }

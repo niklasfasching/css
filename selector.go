@@ -1,8 +1,6 @@
 package css
 
 import (
-	"strings"
-
 	"golang.org/x/net/html"
 )
 
@@ -14,6 +12,7 @@ type AttributeSelector struct {
 	Key   string
 	Value string
 	Type  string
+	match func(string) bool
 }
 
 type UniversalSelector struct {
@@ -112,30 +111,12 @@ func (s *AttributeSelector) Match(n *html.Node) bool {
 	if n.Type != html.ElementNode {
 		return false
 	}
-	value, exists := getAttribute(n, s.Key)
-	switch s.Type {
-	case "~=":
-		for _, v := range strings.Fields(value) {
-			if s.Value == v {
-				return true
-			}
+	for _, a := range n.Attr {
+		if a.Key == s.Key {
+			return s.match(a.Val)
 		}
-		return false
-	case "|=":
-		return s.Value == value || strings.HasPrefix(value, s.Value+"-")
-	case "^=":
-		return strings.HasPrefix(value, s.Value)
-	case "$=":
-		return strings.HasSuffix(value, s.Value)
-	case "*=":
-		return strings.Contains(value, s.Value)
-	case "=":
-		return s.Value == value
-	case "":
-		return exists
-	default:
-		panic("invalid match type for attribute selector: " + s.Type)
 	}
+	return false
 }
 
 func (s *SelectorSequence) Match(n *html.Node) bool {
