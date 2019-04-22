@@ -114,12 +114,15 @@ func attributeSelector(key, value, kind string) Selector {
 	switch kind {
 	case "~=":
 		s.match = func(value string) bool {
-			for _, v := range strings.Fields(value) {
-				if s.Value == v {
+			for {
+				if i := strings.IndexAny(value, " \t\r\n\f"); i == -1 {
+					return value == s.Value
+				} else if value[:i] == s.Value {
 					return true
+				} else {
+					value = value[i+1:]
 				}
 			}
-			return false
 		}
 	case "|=":
 		s.match = func(value string) bool { return s.Value == value || strings.HasPrefix(value, s.Value+"-") }
