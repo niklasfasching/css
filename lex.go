@@ -241,6 +241,9 @@ func lexIdent(l *lexer) stateFn {
 	if err != nil {
 		return l.errorf("%s", err)
 	}
+	if l.start == l.index {
+		return l.errorf("invalid identifier")
+	}
 	l.emit(tokenIdent)
 	return lexSpace
 }
@@ -251,6 +254,8 @@ func lexFunctionArguments(l *lexer) stateFn {
 	}
 	for r, lvl := l.next(), 1; lvl != 0; r = l.next() {
 		switch r {
+		case eof:
+			return l.errorf("unterminated function arguments")
 		case '(':
 			lvl++
 		case ')':
