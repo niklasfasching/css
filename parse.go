@@ -85,7 +85,7 @@ loop:
 			if PseudoClasses[name] == nil {
 				return nil, errors.New("invalid pseudo selector: :" + name)
 			}
-			s.Selectors = append(s.Selectors, &PseudoSelector{name})
+			s.Selectors = append(s.Selectors, &PseudoSelector{name, PseudoClasses[name]})
 		case tokenPseudoFunction:
 			ps, err := p.parsePseudoFunctionSelector()
 			if err != nil {
@@ -148,7 +148,20 @@ func (p *parser) parseAttributeSelector() (Selector, error) {
 }
 
 func (p *parser) parsePseudoFunctionSelector() (Selector, error) {
-	return nil, errors.New("pseudo function selectors are not implemented yet")
+	if p.peek().category != tokenPseudoFunction {
+		return nil, errors.New("expected pseudo function")
+	}
+	name := strings.ToLower(p.next().string)
+	f := PseudoFunctions[name]
+	if p.peek().category != tokenFunctionArguments {
+		return nil, errors.New("expected pseudo function arguments")
+	}
+	args := p.next().string
+	match, err := f(args[1 : len(args)-1])
+	if err != nil {
+		return nil, err
+	}
+	return &PseudoFunctionSelector{name, args, match}, nil
 }
 
 func (p *parser) parseCombinator() string {

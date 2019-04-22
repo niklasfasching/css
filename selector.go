@@ -21,7 +21,14 @@ type UniversalSelector struct {
 }
 
 type PseudoSelector struct {
-	Name string
+	Name  string
+	match func(*html.Node) bool
+}
+
+type PseudoFunctionSelector struct {
+	Name  string
+	Args  string
+	match func(*html.Node) bool
 }
 
 type ElementSelector struct {
@@ -49,6 +56,15 @@ type UnionSelector struct {
 	SelectorB Selector
 }
 
+var (
+	firstChild = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.PrevSibling }, "1", false)
+	firstType  = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.PrevSibling }, "1", true)
+	lastChild  = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.NextSibling }, "1", false)
+	lastType   = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.NextSibling }, "1", true)
+	onlyChild  = combine(firstChild, lastChild)
+	onlyType   = combine(firstType, lastType)
+)
+
 var PseudoClasses = map[string]func(*html.Node) bool{
 	"root":          isRoot,
 	"empty":         isEmpty,
@@ -59,27 +75,27 @@ var PseudoClasses = map[string]func(*html.Node) bool{
 	"required":      func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "required") },
 	"read-only":     func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "readonly") },
 	"read-write":    func(n *html.Node) bool { return isInput(n) && !hasAttribute(n, "readonly") },
-	"first-child":   nil,
-	"first-of-type": nil,
-	"last-child":    nil,
-	"last-of-type":  nil,
-	"only-child":    nil, // same as :first-child:last-child or :nth-child(1):nth-last-child(1)
-	"only-of-type":  nil, // same as :first-of-type:last-of-type or :nth-of-type(1):nth-of-type(1)
+	"first-child":   firstChild,
+	"first-of-type": firstType,
+	"last-child":    lastChild,
+	"last-of-type":  lastType,
+	"only-child":    onlyChild,
+	"only-of-type":  onlyType,
 }
 
-var PseudoFunctions = map[string]func(*html.Node) bool{
-	"dir":              nil,
-	"lang":             nil,
+var PseudoFunctions = map[string]func(string) (func(*html.Node) bool, error){
 	"not":              nil,
-	"nth-child":        nil,
-	"nth-last-child":   nil,
-	"nth-last-of-type": nil,
-	"nth-of-type":      nil,
+	"nth-child":        nthSibling(func(n *html.Node) *html.Node { return n.PrevSibling }, false),
+	"nth-last-child":   nthSibling(func(n *html.Node) *html.Node { return n.NextSibling }, false),
+	"nth-of-type":      nthSibling(func(n *html.Node) *html.Node { return n.PrevSibling }, true),
+	"nth-last-of-type": nthSibling(func(n *html.Node) *html.Node { return n.NextSibling }, true),
 }
 
 func (s *UniversalSelector) Match(*html.Node) bool { return true }
 
-func (s *PseudoSelector) Match(n *html.Node) bool { return PseudoClasses[s.Name](n) }
+func (s *PseudoSelector) Match(n *html.Node) bool { return s.match(n) }
+
+func (s *PseudoFunctionSelector) Match(n *html.Node) bool { return s.match(n) }
 
 func (s *ElementSelector) Match(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == s.Element // TODO: where is element name stored

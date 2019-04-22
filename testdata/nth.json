@@ -1,0 +1,200 @@
+{
+  "Selectors": {
+    "li:nth-child( +3n - 2 )": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "( +3n - 2 )"
+        }
+      ]
+    },
+    "li:nth-child( -1n2 )": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "( -1n2 )"
+        }
+      ]
+    },
+    "li:nth-child(+6)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(+6)"
+        }
+      ]
+    },
+    "li:nth-child(-n+2)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(-n+2)"
+        }
+      ]
+    },
+    "li:nth-child(1n- 2)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(1n- 2)"
+        }
+      ]
+    },
+    "li:nth-child(2n)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(2n)"
+        }
+      ]
+    },
+    "li:nth-child(2n+0)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(2n+0)"
+        }
+      ]
+    },
+    "li:nth-child(2n+1)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(2n+1)"
+        }
+      ]
+    },
+    "li:nth-child(even)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(even)"
+        }
+      ]
+    },
+    "li:nth-child(n+2)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(n+2)"
+        }
+      ]
+    },
+    "li:nth-child(odd)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(odd)"
+        }
+      ]
+    }
+  },
+  "Selections": {
+    "li:nth-child( +3n - 2 )": [
+      "<li>1</li>",
+      "<li>4</li>",
+      "<li>7</li>",
+      "<li>10</li>"
+    ],
+    "li:nth-child( -1n2 )": [
+      "<li>0</li>",
+      "<li>1</li>",
+      "<li>2</li>"
+    ],
+    "li:nth-child(+6)": [
+      "<li>6</li>"
+    ],
+    "li:nth-child(-n+2)": [
+      "<li>0</li>",
+      "<li>1</li>",
+      "<li>2</li>"
+    ],
+    "li:nth-child(1n- 2)": [
+      "<li>0</li>",
+      "<li>1</li>",
+      "<li>2</li>",
+      "<li>3</li>",
+      "<li>4</li>",
+      "<li>5</li>",
+      "<li>6</li>",
+      "<li>7</li>",
+      "<li>8</li>",
+      "<li>9</li>",
+      "<li>10</li>"
+    ],
+    "li:nth-child(2n)": [
+      "<li>0</li>",
+      "<li>2</li>",
+      "<li>4</li>",
+      "<li>6</li>",
+      "<li>8</li>",
+      "<li>10</li>"
+    ],
+    "li:nth-child(2n+0)": [
+      "<li>0</li>",
+      "<li>2</li>",
+      "<li>4</li>",
+      "<li>6</li>",
+      "<li>8</li>",
+      "<li>10</li>"
+    ],
+    "li:nth-child(2n+1)": [
+      "<li>1</li>",
+      "<li>3</li>",
+      "<li>5</li>",
+      "<li>7</li>",
+      "<li>9</li>"
+    ],
+    "li:nth-child(even)": [
+      "<li>0</li>",
+      "<li>2</li>",
+      "<li>4</li>",
+      "<li>6</li>",
+      "<li>8</li>",
+      "<li>10</li>"
+    ],
+    "li:nth-child(n+2)": [
+      "<li>2</li>"
+    ],
+    "li:nth-child(odd)": [
+      "<li>1</li>",
+      "<li>3</li>",
+      "<li>5</li>",
+      "<li>7</li>",
+      "<li>9</li>"
+    ]
+  }
+}

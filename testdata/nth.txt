@@ -1,0 +1,31 @@
+li:nth-child(1n- 2)
+
+
+li:nth-child(2n+1)
+
+
+li:nth-child(odd)
+
+
+li:nth-child(2n+0)
+
+
+li:nth-child(2n)
+
+
+li:nth-child(n+2)
+
+
+li:nth-child(+6)
+
+
+li:nth-child(even)
+
+
+li:nth-child(-n+2)
+
+
+li:nth-child( +3n - 2 )
+
+
+li:nth-child( -1n2 )
