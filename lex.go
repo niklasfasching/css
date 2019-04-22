@@ -173,7 +173,7 @@ func isDigit(r rune) bool          { return '0' <= r && r <= '9' }
 func isMatchChar(r rune) bool      { return strings.ContainsRune("~|^$*", r) }
 func isCombinatorChar(r rune) bool { return strings.ContainsRune("+~>,", r) }
 
-func lexIdentifier(l *lexer) error {
+func acceptIdentifier(l *lexer) error {
 	if l.peek() == '-' {
 		l.next()
 	}
@@ -185,7 +185,7 @@ func lexIdentifier(l *lexer) error {
 }
 
 func lexClass(l *lexer) stateFn {
-	err := lexIdentifier(l)
+	err := acceptIdentifier(l)
 	if err != nil {
 		return l.errorf("%s", err)
 	}
@@ -238,7 +238,7 @@ func lexPseudo(l *lexer) stateFn {
 	if l.peek() == ':' {
 		return l.errorf("invalid use of pseudo element")
 	}
-	err := lexIdentifier(l)
+	err := acceptIdentifier(l)
 	if err != nil {
 		return l.errorf("%s", err)
 	}
@@ -251,7 +251,7 @@ func lexPseudo(l *lexer) stateFn {
 }
 
 func lexIdent(l *lexer) stateFn {
-	err := lexIdentifier(l)
+	err := acceptIdentifier(l)
 	if err != nil {
 		return l.errorf("%s", err)
 	}
