@@ -120,6 +120,24 @@
           "Args": "(odd)"
         }
       ]
+    },
+    "ul :not(li:nth-child(even))": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Element": "ul"
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Name": "not",
+            "Args": "(li:nth-child(even))"
+          }
+        ]
+      },
+      "Direct": false
     }
   },
   "Selections": {
@@ -190,6 +208,13 @@
       "<li>2</li>"
     ],
     "li:nth-child(odd)": [
+      "<li>1</li>",
+      "<li>3</li>",
+      "<li>5</li>",
+      "<li>7</li>",
+      "<li>9</li>"
+    ],
+    "ul :not(li:nth-child(even))": [
       "<li>1</li>",
       "<li>3</li>",
       "<li>5</li>",

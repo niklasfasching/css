@@ -29,3 +29,6 @@ li:nth-child( +3n - 2 )
 
 
 li:nth-child( -1n2 )
+
+
+ul :not(li:nth-child(even))

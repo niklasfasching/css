@@ -91,6 +91,13 @@ var PseudoFunctions = map[string]func(string) (func(*html.Node) bool, error){
 	"nth-last-of-type": nthSibling(func(n *html.Node) *html.Node { return n.NextSibling }, true),
 }
 
+func init() {
+	PseudoFunctions["not"] = func(args string) (func(*html.Node) bool, error) {
+		s, err := Compile(args)
+		return func(n *html.Node) bool { return n.Type == html.ElementNode && !s.Match(n) }, err
+	}
+}
+
 func (s *UniversalSelector) Match(*html.Node) bool { return true }
 
 func (s *PseudoSelector) Match(n *html.Node) bool { return s.match(n) }
