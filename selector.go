@@ -105,7 +105,7 @@ func (s *PseudoSelector) Match(n *html.Node) bool { return s.match(n) }
 func (s *PseudoFunctionSelector) Match(n *html.Node) bool { return s.match(n) }
 
 func (s *ElementSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.Data == s.Element // TODO: where is element name stored
+	return n.Type == html.ElementNode && n.Data == s.Element
 }
 
 func (s *AttributeSelector) Match(n *html.Node) bool {

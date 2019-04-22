@@ -9,7 +9,6 @@ for fun - don't use this!
 * todo
 - escape handling (string/ident)
 - investigate right-to-left matching (fb55)
-- implement pseudo function selectors
 * resources
 - https://github.com/andybalholm/cascadia
 - https://github.com/ericchiang/css
