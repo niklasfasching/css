@@ -12,6 +12,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/andybalholm/cascadia"
+	"github.com/ericchiang/css"
 	"golang.org/x/net/html"
 )
 
@@ -29,7 +31,8 @@ func TestCSS(t *testing.T) {
 		t.Skip()
 	}
 
-	eachSelectorFile(func(path string) {
+	for _, path := range selectorFiles() {
+		log.Println(path)
 		result := readResult(path)
 		selectors := strings.Split(readFileString(path), "\n\n\n")
 		for _, selector := range selectors {
@@ -44,7 +47,46 @@ func TestCSS(t *testing.T) {
 				t.Errorf("%s\ngot:\n\t'%s'\n\nexpected:\n\t'%s'", selector, jsonify(actual), jsonify(expected))
 			}
 		}
+	}
+}
+
+var benchmarkResult []*html.Node // prevent compiler optimization
+
+func BenchmarkNiklasFaschingCSS(b *testing.B) {
+	benchmark(b, func(selector string) func(*html.Node) []*html.Node {
+		s := MustCompile(selector)
+		return func(html *html.Node) []*html.Node { return All(s, html) }
 	})
+}
+
+func BenchmarkEricChiangCSS(b *testing.B) {
+	benchmark(b, func(selector string) func(*html.Node) []*html.Node {
+		s := css.MustCompile(selector)
+		return func(html *html.Node) []*html.Node { return s.Select(html) }
+	})
+}
+
+func BenchmarkAndyBalholmCSS(b *testing.B) {
+	benchmark(b, func(selector string) func(*html.Node) []*html.Node {
+		s := cascadia.MustCompile(selector)
+		return func(html *html.Node) []*html.Node { return s.MatchAll(html) }
+	})
+}
+
+func benchmark(b *testing.B, compile func(string) func(*html.Node) []*html.Node) {
+	defer func() {
+		if err := recover(); err != nil {
+			b.Skip(err)
+		}
+	}()
+	path := "testdata/benchmark.txt"
+	html := readHTML(path)
+	for _, selector := range strings.Split(readFileString(path), "\n\n\n") {
+		matchAll := compile(strings.TrimSpace(selector))
+		for n := 0; n < b.N; n++ {
+			benchmarkResult = matchAll(html)
+		}
+	}
 }
 
 func interfacify(in interface{}) (out interface{}) {
@@ -60,7 +102,8 @@ func interfacify(in interface{}) (out interface{}) {
 }
 
 func update() {
-	eachSelectorFile(func(path string) {
+	for _, path := range selectorFiles() {
+		log.Println(path)
 		result := Result{
 			Selectors:  map[string]interface{}{},
 			Selections: map[string][]string{},
@@ -80,7 +123,7 @@ func update() {
 			}
 		}
 		writeResult(path, result)
-	})
+	}
 }
 
 func renderHTML(ns []*html.Node) []string {
@@ -94,13 +137,6 @@ func renderHTML(ns []*html.Node) []string {
 		out[i] = s.String()
 	}
 	return out
-}
-
-func eachSelectorFile(f func(string)) {
-	for _, path := range selectorFiles() {
-		log.Println(path)
-		f(path)
-	}
 }
 
 func selectorFiles() []string {

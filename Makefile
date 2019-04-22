@@ -9,4 +9,4 @@ build:
 
 .PHONY: test
 test: build
-	go test -v
+	go test -v -bench=.
