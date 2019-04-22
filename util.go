@@ -110,34 +110,21 @@ func combine(a, b func(*html.Node) bool) func(*html.Node) bool {
 }
 
 func attributeSelector(key, value, kind string) Selector {
-	s := AttributeSelector{key, value, kind, nil}
-	switch kind {
-	case "~=":
-		s.match = func(value string) bool {
-			for {
-				if i := strings.IndexAny(value, " \t\r\n\f"); i == -1 {
-					return value == s.Value
-				} else if value[:i] == s.Value {
-					return true
-				} else {
-					value = value[i+1:]
-				}
-			}
-		}
-	case "|=":
-		s.match = func(value string) bool { return s.Value == value || strings.HasPrefix(value, s.Value+"-") }
-	case "^=":
-		s.match = func(value string) bool { return strings.HasPrefix(value, s.Value) }
-	case "$=":
-		s.match = func(value string) bool { return strings.HasSuffix(value, s.Value) }
-	case "*=":
-		s.match = func(value string) bool { return strings.Contains(value, s.Value) }
-	case "=":
-		s.match = func(value string) bool { return s.Value == value }
-	case "":
-		s.match = func(value string) bool { return true }
-	default:
+	s := AttributeSelector{key, value, kind, Matchers[kind]}
+	if s.match == nil {
 		panic("invalid match type for attribute selector: " + s.Type)
 	}
 	return &s
+}
+
+func includeMatch(value, sValue string) bool {
+	for {
+		if i := strings.IndexAny(value, " \t\r\n\f"); i == -1 {
+			return value == sValue
+		} else if value[:i] == sValue {
+			return true
+		} else {
+			value = value[i+1:]
+		}
+	}
 }

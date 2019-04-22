@@ -1,6 +1,8 @@
 package css
 
 import (
+	"strings"
+
 	"golang.org/x/net/html"
 )
 
@@ -12,7 +14,7 @@ type AttributeSelector struct {
 	Key   string
 	Value string
 	Type  string
-	match func(string) bool
+	match func(string, string) bool
 }
 
 type UniversalSelector struct {
@@ -90,6 +92,16 @@ var PseudoFunctions = map[string]func(string) (func(*html.Node) bool, error){
 	"nth-last-of-type": nthSibling(func(n *html.Node) *html.Node { return n.NextSibling }, true),
 }
 
+var Matchers = map[string]func(string, string) bool{
+	"~=": includeMatch,
+	"|=": func(av, sv string) bool { return av == sv || strings.HasPrefix(av, sv+"-") },
+	"^=": func(av, sv string) bool { return strings.HasPrefix(av, sv) },
+	"$=": func(av, sv string) bool { return strings.HasSuffix(av, sv) },
+	"*=": func(av, sv string) bool { return strings.Contains(av, sv) },
+	"=":  func(av, sv string) bool { return av == av },
+	"":   func(string, string) bool { return true },
+}
+
 func init() {
 	PseudoFunctions["not"] = func(args string) (func(*html.Node) bool, error) {
 		s, err := Compile(args)
@@ -113,7 +125,7 @@ func (s *AttributeSelector) Match(n *html.Node) bool {
 	}
 	for _, a := range n.Attr {
 		if a.Key == s.Key {
-			return s.match(a.Val)
+			return s.match(a.Val, s.Value)
 		}
 	}
 	return false

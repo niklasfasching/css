@@ -37,6 +37,8 @@ const (
 
 const eof = -1
 
+var MatchChars = "~|^$*"
+
 type stateFn func(*lexer) stateFn
 
 type lexer struct {
@@ -162,7 +164,7 @@ func isNameChar(r rune) bool {
 
 func isWhitespace(r rune) bool     { return strings.ContainsRune(" \t\f\r\n", r) }
 func isDigit(r rune) bool          { return '0' <= r && r <= '9' }
-func isMatchChar(r rune) bool      { return strings.ContainsRune("~|^$*", r) }
+func isMatchChar(r rune) bool      { return strings.ContainsRune(MatchChars, r) }
 func isCombinatorChar(r rune) bool { return strings.ContainsRune("+~>,", r) }
 
 func acceptIdentifier(l *lexer) error {
