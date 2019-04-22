@@ -27,14 +27,12 @@ const (
 	tokenID
 	tokenPseudoClass
 	tokenPseudoFunction
-	tokenNumber
+	tokenFunctionArguments
 	tokenString
 	tokenMatcher
 	tokenCombinator
 	tokenBracketOpen
 	tokenBracketClose
-	tokenParenthesisOpen
-	tokenParenthesisClose
 )
 
 const eof = -1
@@ -123,17 +121,11 @@ func lexSpace(l *lexer) stateFn {
 		l.emit(tokenBracketClose)
 		return lexSpace
 	case r == '(':
-		l.emit(tokenParenthesisOpen)
-		return lexSpace
-	case r == ')':
-		l.emit(tokenParenthesisClose)
-		return lexSpace
+		l.backup()
+		return lexFunctionArguments
 	case r == '*':
 		l.emit(tokenUniversal)
 		return lexSpace
-	case r == '.' && isDigit(l.peek()), isDigit(r):
-		l.backup()
-		return lexNumber
 	case r == '.':
 		l.ignore()
 		return lexClass
@@ -228,21 +220,6 @@ func lexID(l *lexer) stateFn {
 	return lexSpace
 }
 
-func lexNumber(l *lexer) stateFn {
-	l.acceptRun(isDigit)
-	if l.peek() == '.' {
-		l.next()
-		if !isDigit(l.peek()) {
-			return l.errorf("invalid number")
-		}
-		l.acceptRun(isDigit)
-	} else if l.index == l.start {
-		return l.errorf("invalid number")
-	}
-	l.emit(tokenNumber)
-	return lexSpace
-}
-
 func lexPseudo(l *lexer) stateFn {
 	if l.peek() == ':' {
 		return l.errorf("invalid use of pseudo element")
@@ -265,5 +242,25 @@ func lexIdent(l *lexer) stateFn {
 		return l.errorf("%s", err)
 	}
 	l.emit(tokenIdent)
+	return lexSpace
+}
+
+func lexFunctionArguments(l *lexer) stateFn {
+	if l.next() != '(' {
+		return l.errorf("invalid start of function arguments")
+	}
+	for r, lvl := l.next(), 1; lvl != 0; r = l.next() {
+		switch r {
+		case '(':
+			lvl++
+		case ')':
+			lvl--
+		case '"', '\'':
+			if err := acceptString(l); err != nil {
+				return l.errorf("%s", err)
+			}
+		}
+	}
+	l.emit(tokenFunctionArguments)
 	return lexSpace
 }
