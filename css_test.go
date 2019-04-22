@@ -65,10 +65,7 @@ func update() {
 			Selectors:  map[string]interface{}{},
 			Selections: map[string][]string{},
 		}
-		html, err := readHTML(path)
-		if err != nil {
-			log.Printf("could not read html file: %s\n", err)
-		}
+		html := readHTML(path)
 		selectors := strings.Split(readFileString(path), "\n\n\n")
 		for _, selector := range selectors {
 			selector = strings.TrimSpace(selector)
@@ -78,7 +75,9 @@ func update() {
 				continue
 			}
 			result.Selectors[selector] = compiled
-			result.Selections[selector] = renderHTML(All(compiled, html))
+			if html != nil {
+				result.Selections[selector] = renderHTML(All(compiled, html))
+			}
 		}
 		writeResult(path, result)
 	})
@@ -129,9 +128,17 @@ func readFileString(path string) string {
 	return string(bs)
 }
 
-func readHTML(selectorFilePath string) (*html.Node, error) {
+func readHTML(selectorFilePath string) *html.Node {
 	path := selectorFilePath[:len(selectorFilePath)-len(".txt")] + ".html"
-	return html.Parse(strings.NewReader(readFileString(path)))
+	bs, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil
+	}
+	n, err := html.Parse(bytes.NewReader(bs))
+	if err != nil {
+		panic(err)
+	}
+	return n
 }
 
 func readResult(selectorFilePath string) (result Result) {
