@@ -35,6 +35,21 @@ func isRoot(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Parent != nil && n.Parent.Type == html.DocumentNode
 }
 
+func onlyChild(ofType bool) func(*html.Node) bool {
+	return func(n *html.Node) bool {
+		if n.Parent == nil {
+			return true
+		}
+		count := 0
+		for c := n.Parent.FirstChild; c != nil && count <= 1; c = c.NextSibling {
+			if c.Type == html.ElementNode && (!ofType || c.Data == n.Data) {
+				count++
+			}
+		}
+		return count == 1
+	}
+}
+
 func parseNthArgs(args string) (a, b int, err error) {
 	if args = strings.TrimSpace(args); args == "odd" {
 		return 2, 1, nil
@@ -103,10 +118,6 @@ func hasAttribute(n *html.Node, key string) bool {
 		}
 	}
 	return false
-}
-
-func combine(a, b func(*html.Node) bool) func(*html.Node) bool {
-	return func(n *html.Node) bool { return a(n) && b(n) }
 }
 
 func attributeSelector(key, value, kind string) Selector {

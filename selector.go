@@ -65,15 +65,6 @@ type UnionSelector struct {
 	SelectorB Selector
 }
 
-var (
-	firstChild = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.PrevSibling }, "1", false)
-	firstType  = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.PrevSibling }, "1", true)
-	lastChild  = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.NextSibling }, "1", false)
-	lastType   = nthSiblingCompiled(func(n *html.Node) *html.Node { return n.NextSibling }, "1", true)
-	onlyChild  = combine(firstChild, lastChild)
-	onlyType   = combine(firstType, lastType)
-)
-
 var PseudoClasses = map[string]func(*html.Node) bool{
 	"root":          isRoot,
 	"empty":         isEmpty,
@@ -84,12 +75,12 @@ var PseudoClasses = map[string]func(*html.Node) bool{
 	"required":      func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "required") },
 	"read-only":     func(n *html.Node) bool { return isInput(n) && hasAttribute(n, "readonly") },
 	"read-write":    func(n *html.Node) bool { return isInput(n) && !hasAttribute(n, "readonly") },
-	"first-child":   firstChild,
-	"first-of-type": firstType,
-	"last-child":    lastChild,
-	"last-of-type":  lastType,
-	"only-child":    onlyChild,
-	"only-of-type":  onlyType,
+	"first-child":   nthSiblingCompiled(func(n *html.Node) *html.Node { return n.PrevSibling }, "1", false),
+	"first-of-type": nthSiblingCompiled(func(n *html.Node) *html.Node { return n.PrevSibling }, "1", true),
+	"last-child":    nthSiblingCompiled(func(n *html.Node) *html.Node { return n.NextSibling }, "1", false),
+	"last-of-type":  nthSiblingCompiled(func(n *html.Node) *html.Node { return n.NextSibling }, "1", true),
+	"only-child":    onlyChild(false),
+	"only-of-type":  onlyChild(true),
 }
 
 var PseudoFunctions = map[string]func(string) (func(*html.Node) bool, error){
