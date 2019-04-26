@@ -1,0 +1,5 @@
+{
+  "Selectors": {
+    "^ÿ": "invalid starting char for identifier"
+  }
+}

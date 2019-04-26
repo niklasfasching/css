@@ -21,7 +21,7 @@ var updateTestData = flag.Bool("update-test-data", false, "update test data rath
 
 type Result struct {
 	Selectors  map[string]interface{}
-	Selections map[string][]string
+	Selections map[string][]string `json:",omitempty"`
 }
 
 func TestCSS(t *testing.T) {
@@ -37,10 +37,12 @@ func TestCSS(t *testing.T) {
 		selectors := strings.Split(readFileString(path), "\n\n\n")
 		for _, selector := range selectors {
 			selector = strings.TrimSpace(selector)
-			actual, err := Compile(selector)
+			var actual interface{}
+			compiled, err := Compile(selector)
 			if err != nil {
-				t.Errorf("%s\ngot error: %s", selector, err)
-				continue
+				actual = err.Error()
+			} else {
+				actual = compiled
 			}
 			expected := result.Selectors[selector]
 			if !reflect.DeepEqual(interfacify(actual), expected) {
@@ -114,7 +116,7 @@ func update() {
 			selector = strings.TrimSpace(selector)
 			compiled, err := Compile(selector)
 			if err != nil {
-				log.Printf("%s\ngot error: %s", selector, err)
+				result.Selectors[selector] = err.Error()
 				continue
 			}
 			result.Selectors[selector] = compiled
