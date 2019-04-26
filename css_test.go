@@ -52,8 +52,6 @@ func TestCSS(t *testing.T) {
 	}
 }
 
-var benchmarkResult []*html.Node // prevent compiler optimization
-
 func BenchmarkNiklasFaschingCSS(b *testing.B) {
 	benchmark(b, func(selector string) func(*html.Node) []*html.Node {
 		s := MustCompile(selector)
@@ -82,11 +80,17 @@ func benchmark(b *testing.B, compile func(string) func(*html.Node) []*html.Node)
 		}
 	}()
 	path := "testdata/benchmark.txt"
-	html := readHTML(path)
+	htmlString, result := readHTML(path), readResult(path)
 	for _, selector := range strings.Split(readFileString(path), "\n\n\n") {
-		matchAll := compile(strings.TrimSpace(selector))
+		selector = strings.TrimSpace(selector)
+		matchAll := compile(selector)
+		var selection []*html.Node
 		for n := 0; n < b.N; n++ {
-			benchmarkResult = matchAll(html)
+			selection = matchAll(htmlString)
+		}
+		if !reflect.DeepEqual(renderHTML(selection), result.Selections[selector]) {
+			log.Printf("Bad result for %s:\nGot: %v\nExpected: %v",
+				selector, renderHTML(selection), result.Selections[selector])
 		}
 	}
 }

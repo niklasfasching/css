@@ -20,6 +20,61 @@
         ]
       }
     },
+    "li:nth-child(2n)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(2n)"
+        }
+      ]
+    },
+    "li:nth-child(2n+0)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(2n+0)"
+        }
+      ]
+    },
+    "li:nth-child(2n+1)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(2n+1)"
+        }
+      ]
+    },
+    "li:nth-child(n+2)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(n+2)"
+        }
+      ]
+    },
+    "li:nth-child(odd)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "nth-child",
+          "Args": "(odd)"
+        }
+      ]
+    },
     "ul": {
       "Selectors": [
         {
@@ -85,6 +140,23 @@
   },
   "Selections": {
     ".pear, .apple": [
+      "<li class=\"apple\">Apple</li>",
+      "<li class=\"pear\">Pear</li>"
+    ],
+    "li:nth-child(2n)": [
+      "<li class=\"orange\">Orange</li>"
+    ],
+    "li:nth-child(2n+0)": [
+      "<li class=\"orange\">Orange</li>"
+    ],
+    "li:nth-child(2n+1)": [
+      "<li class=\"apple\">Apple</li>",
+      "<li class=\"pear\">Pear</li>"
+    ],
+    "li:nth-child(n+2)": [
+      "<li class=\"orange\">Orange</li>"
+    ],
+    "li:nth-child(odd)": [
       "<li class=\"apple\">Apple</li>",
       "<li class=\"pear\">Pear</li>"
     ],
