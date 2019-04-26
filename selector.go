@@ -110,9 +110,13 @@ func init() {
 
 func (s *UniversalSelector) Match(*html.Node) bool { return true }
 
-func (s *PseudoSelector) Match(n *html.Node) bool { return s.match(n) }
+func (s *PseudoSelector) Match(n *html.Node) bool {
+	return n.Type == html.ElementNode && s.match(n)
+}
 
-func (s *PseudoFunctionSelector) Match(n *html.Node) bool { return s.match(n) }
+func (s *PseudoFunctionSelector) Match(n *html.Node) bool {
+	return n.Type == html.ElementNode && s.match(n)
+}
 
 func (s *ElementSelector) Match(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == s.Element
@@ -131,6 +135,9 @@ func (s *AttributeSelector) Match(n *html.Node) bool {
 }
 
 func (s *SelectorSequence) Match(n *html.Node) bool {
+	if n.Type != html.ElementNode {
+		return false
+	}
 	for i := len(s.Selectors) - 1; i >= 0; i-- {
 		if !s.Selectors[i].Match(n) {
 			return false
@@ -140,9 +147,9 @@ func (s *SelectorSequence) Match(n *html.Node) bool {
 }
 
 func (s *DescendantSelector) Match(n *html.Node) bool {
-	if s.Selector.Match(n) {
+	if n.Type == html.ElementNode && s.Selector.Match(n) {
 		for n := n.Parent; n != nil; n = n.Parent {
-			if s.Ancestor.Match(n) {
+			if n.Type == html.ElementNode && s.Ancestor.Match(n) {
 				return true
 			}
 		}
@@ -151,13 +158,13 @@ func (s *DescendantSelector) Match(n *html.Node) bool {
 }
 
 func (s *ChildSelector) Match(n *html.Node) bool {
-	return s.Selector.Match(n) && n.Parent != nil && s.Parent.Match(n.Parent)
+	return n.Type == html.ElementNode && n.Parent != nil && s.Selector.Match(n) && s.Parent.Match(n.Parent)
 }
 
 func (s *SubsequentSiblingSelector) Match(n *html.Node) bool {
-	if s.Selector.Match(n) {
+	if n.Type == html.ElementNode && s.Selector.Match(n) {
 		for n := n.PrevSibling; n != nil; n = n.PrevSibling {
-			if s.Sibling.Match(n) {
+			if n.Type == html.ElementNode && s.Sibling.Match(n) {
 				return true
 			}
 		}
@@ -166,9 +173,9 @@ func (s *SubsequentSiblingSelector) Match(n *html.Node) bool {
 }
 
 func (s *NextSiblingSelector) Match(n *html.Node) bool {
-	return s.Selector.Match(n) && n.PrevSibling != nil && s.Sibling.Match(n.PrevSibling)
+	return n.Type == html.ElementNode && n.PrevSibling != nil && s.Selector.Match(n) && s.Sibling.Match(n.PrevSibling)
 }
 
 func (s *UnionSelector) Match(n *html.Node) bool {
-	return s.SelectorA.Match(n) || s.SelectorB.Match(n)
+	return n.Type == html.ElementNode && (s.SelectorA.Match(n) || s.SelectorB.Match(n))
 }

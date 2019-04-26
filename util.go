@@ -37,6 +37,9 @@ func isRoot(n *html.Node) bool {
 
 func onlyChild(ofType bool) func(*html.Node) bool {
 	return func(n *html.Node) bool {
+		if n.Type != html.ElementNode {
+			return false
+		}
 		if n.Parent == nil {
 			return true
 		}
@@ -76,6 +79,9 @@ func nthSibling(next func(*html.Node) *html.Node, ofType bool) func(string) (fun
 	return func(args string) (func(*html.Node) bool, error) {
 		a, b, err := parseNthArgs(args)
 		return func(n *html.Node) bool {
+			if n.Type != html.ElementNode {
+				return false
+			}
 			anb := 0
 			for s := next(n); s != nil; s = next(s) {
 				if s.Type == html.ElementNode && (!ofType || s.Data == n.Data) {
@@ -112,6 +118,9 @@ func isNth(a, b, anb int) bool {
 }
 
 func hasAttribute(n *html.Node, key string) bool {
+	if n.Type != html.ElementNode {
+		return false
+	}
 	for _, a := range n.Attr {
 		if a.Key == key {
 			return true
