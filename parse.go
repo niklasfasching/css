@@ -135,7 +135,7 @@ func (p *parser) parseAttributeSelector() (Selector, error) {
 	key, matcher := strings.ToLower(t.string), p.parseMatcher()
 	if t := p.next(); matcher == "" && t.category == tokenBracketClose {
 		return attributeSelector(key, "", ""), nil
-	} else if t.category == tokenString || t.category == tokenIdent {
+	} else if matcher != "" && (t.category == tokenString || t.category == tokenIdent) {
 		if p.next().category == tokenBracketClose {
 			value := t.string
 			if t.category == tokenString {
