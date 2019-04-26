@@ -82,13 +82,13 @@ func nthSibling(next func(*html.Node) *html.Node, ofType bool) func(string) (fun
 			if n.Type != html.ElementNode {
 				return false
 			}
-			anb := 0
+			nth := 1
 			for s := next(n); s != nil; s = next(s) {
 				if s.Type == html.ElementNode && (!ofType || s.Data == n.Data) {
-					anb++
+					nth++
 				}
 			}
-			return isNth(a, b, anb)
+			return isNth(a, b, nth)
 		}, err
 	}
 }
@@ -112,9 +112,13 @@ func atoi(s, fallback string) (int, error) {
 	return strconv.Atoi(s)
 }
 
-func isNth(a, b, anb int) bool {
-	an := anb - b
-	return (a == 0 && b == anb) || (a != 0 && an/a >= 0 && an%a == 0)
+// isNth checks whether y is a valid result for the given a and b.
+// The formula is y = (a*n+b) with n being any positive integer, starting with 1.
+// If a is 0 a*n is 0 and y must be b - otherwise a must fit into y-b n times, i.e. 1 or more times
+// without any remainder.
+func isNth(a, b, y int) bool {
+	an := (y - b)
+	return (a == 0 && b == y) || (a != 0 && an/a >= 0 && an%a == 0)
 }
 
 func hasAttribute(n *html.Node, key string) bool {

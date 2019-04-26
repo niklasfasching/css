@@ -147,7 +147,6 @@
       "<li>10</li>"
     ],
     "li:nth-child( -1n2 )": [
-      "<li>0</li>",
       "<li>1</li>",
       "<li>2</li>"
     ],
@@ -155,12 +154,10 @@
       "<li>6</li>"
     ],
     "li:nth-child(-n+2)": [
-      "<li>0</li>",
       "<li>1</li>",
       "<li>2</li>"
     ],
     "li:nth-child(1n- 2)": [
-      "<li>0</li>",
       "<li>1</li>",
       "<li>2</li>",
       "<li>3</li>",
@@ -173,7 +170,6 @@
       "<li>10</li>"
     ],
     "li:nth-child(2n)": [
-      "<li>0</li>",
       "<li>2</li>",
       "<li>4</li>",
       "<li>6</li>",
@@ -181,7 +177,6 @@
       "<li>10</li>"
     ],
     "li:nth-child(2n+0)": [
-      "<li>0</li>",
       "<li>2</li>",
       "<li>4</li>",
       "<li>6</li>",
@@ -196,7 +191,6 @@
       "<li>9</li>"
     ],
     "li:nth-child(even)": [
-      "<li>0</li>",
       "<li>2</li>",
       "<li>4</li>",
       "<li>6</li>",
