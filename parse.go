@@ -153,6 +153,9 @@ func (p *parser) parsePseudoFunctionSelector() (Selector, error) {
 	}
 	name := strings.ToLower(p.next().string)
 	f := PseudoFunctions[name]
+	if f == nil {
+		return nil, errors.New("invalid pseudo function: :" + name)
+	}
 	if p.peek().category != tokenFunctionArguments {
 		return nil, errors.New("expected pseudo function arguments")
 	}
