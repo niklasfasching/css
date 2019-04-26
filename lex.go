@@ -69,15 +69,15 @@ func (l *lexer) next() rune {
 }
 
 func (l *lexer) peek() rune {
-	r := l.next()
-	l.backup()
+	if l.index >= len(l.input) {
+		return eof
+	}
+	r, _ := utf8.DecodeRuneInString(l.input[l.index:])
 	return r
 }
 
 func (l *lexer) backup() {
 	l.index -= l.width
-	_, w := utf8.DecodeRuneInString(l.input[l.index:])
-	l.width = w
 }
 
 func (l *lexer) emit(c tokenCategory) {
