@@ -101,6 +101,14 @@ var Matchers = map[string]func(string, string) bool{
 	"":   func(string, string) bool { return true },
 }
 
+var Combinators = map[string]func(Selector, Selector) Selector{
+	" ": func(s1, s2 Selector) Selector { return &DescendantSelector{s1, s2} },
+	">": func(s1, s2 Selector) Selector { return &ChildSelector{s1, s2} },
+	"+": func(s1, s2 Selector) Selector { return &NextSiblingSelector{s1, s2} },
+	"~": func(s1, s2 Selector) Selector { return &SubsequentSiblingSelector{s1, s2} },
+	",": func(s1, s2 Selector) Selector { return &UnionSelector{s1, s2} },
+}
+
 func init() {
 	PseudoFunctions["not"] = func(args string) (func(*html.Node) bool, error) {
 		s, err := Compile(args)

@@ -163,7 +163,7 @@ func isNameChar(r rune) bool {
 func isWhitespace(r rune) bool     { return strings.ContainsRune(" \t\f\r\n", r) }
 func isDigit(r rune) bool          { return '0' <= r && r <= '9' }
 func isMatchChar(r rune) bool      { return Matchers[string(r)+"="] != nil }
-func isCombinatorChar(r rune) bool { return strings.ContainsRune("+~>,", r) }
+func isCombinatorChar(r rune) bool { return Combinators[string(r)] != nil }
 
 func acceptIdentifier(l *lexer) error {
 	if l.peek() == '-' {

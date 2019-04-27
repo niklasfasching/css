@@ -104,24 +104,15 @@ loop:
 
 func (p *parser) parseComplexSelectorSequence(s1 Selector) (Selector, error) {
 	combinator := p.parseCombinator()
+	f := Combinators[combinator]
+	if f == nil {
+		return nil, fmt.Errorf("bad combinator: '%s'", combinator)
+	}
 	s2, err := p.parseSimpleSelectorSequence()
 	if err != nil {
 		return nil, err
 	}
-	switch combinator {
-	case " ":
-		return &DescendantSelector{s1, s2}, nil
-	case ">":
-		return &ChildSelector{s1, s2}, nil
-	case "+":
-		return &NextSiblingSelector{s1, s2}, nil
-	case "~":
-		return &SubsequentSiblingSelector{s1, s2}, nil
-	case ",":
-		return &UnionSelector{s1, s2}, nil
-	default:
-		return nil, fmt.Errorf("bad combinator: '%s'", combinator)
-	}
+	return f(s1, s2), nil
 }
 
 func (p *parser) parseAttributeSelector() (Selector, error) {
