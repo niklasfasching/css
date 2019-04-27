@@ -53,20 +53,20 @@ func onlyChild(ofType bool) func(*html.Node) bool {
 	}
 }
 
-func parseNthArgs(args string) (a, b int, err error) {
+func parseNthArgs(args string) (int, int, error) {
 	if args = strings.TrimSpace(args); args == "odd" {
 		return 2, 1, nil
 	} else if args == "even" {
 		return 2, 0, nil
 	} else if m := simpleNthRegexp.FindStringSubmatch(args); m != nil {
-		b, err = atoi(m[1], "0")
+		b, err := atoi(m[1], "0")
 		return 0, b, err
 	} else if m := complexNthRegexp.FindStringSubmatch(args); m != nil {
-		a, err = atoi(m[1], "1")
+		a, err := atoi(m[1], "1")
 		if err != nil {
 			return 0, 0, err
 		}
-		b, err = atoi(m[2], "0")
+		b, err := atoi(m[2], "0")
 		if err != nil {
 			return 0, 0, err
 		}
