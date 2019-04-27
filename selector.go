@@ -116,7 +116,7 @@ func init() {
 	}
 }
 
-func (s *UniversalSelector) Match(*html.Node) bool { return true }
+func (s *UniversalSelector) Match(n *html.Node) bool { return n.Type == html.ElementNode }
 
 func (s *PseudoSelector) Match(n *html.Node) bool {
 	return n.Type == html.ElementNode && s.match(n)
