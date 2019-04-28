@@ -46,7 +46,7 @@ func parse(tokens []token) (Selector, error) {
 		return nil, err
 	}
 	for {
-		if t := p.peek(); t.category == tokenEOF {
+		if p.peek().category == tokenEOF {
 			return s, nil
 		}
 		s, err = p.parseComplexSelectorSequence(s)
@@ -116,14 +116,10 @@ func (p *parser) parseComplexSelectorSequence(s1 Selector) (Selector, error) {
 }
 
 func (p *parser) parseAttributeSelector() (Selector, error) {
-	if p.next().category != tokenBracketOpen {
+	if p.peek().category != tokenIdent {
 		return nil, errors.New("invalid attribute selector")
 	}
-	t := p.next()
-	if t.category != tokenIdent {
-		return nil, errors.New("invalid attribute selector")
-	}
-	key, matcher := strings.ToLower(t.string), p.parseMatcher()
+	key, matcher := strings.ToLower(p.next().string), p.parseMatcher()
 	if t := p.next(); matcher == "" && t.category == tokenBracketClose {
 		return attributeSelector(key, "", ""), nil
 	} else if matcher != "" && (t.category == tokenString || t.category == tokenIdent) {
@@ -139,9 +135,6 @@ func (p *parser) parseAttributeSelector() (Selector, error) {
 }
 
 func (p *parser) parsePseudoFunctionSelector() (Selector, error) {
-	if p.peek().category != tokenPseudoFunction {
-		return nil, errors.New("expected pseudo function")
-	}
 	name := strings.ToLower(p.next().string)
 	f := PseudoFunctions[name]
 	if f == nil {
@@ -165,8 +158,6 @@ func (p *parser) parseCombinator() string {
 		combinator = p.next().string
 	} else if space {
 		combinator = " "
-	} else {
-		return ""
 	}
 	p.acceptRun(tokenSpace)
 	return combinator

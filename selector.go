@@ -155,33 +155,37 @@ func (s *SelectorSequence) Match(n *html.Node) bool {
 }
 
 func (s *DescendantSelector) Match(n *html.Node) bool {
-	if n.Type == html.ElementNode && s.Selector.Match(n) {
-		for n := n.Parent; n != nil; n = n.Parent {
-			if n.Type == html.ElementNode && s.Ancestor.Match(n) {
-				return true
-			}
+	if n.Type != html.ElementNode || !s.Selector.Match(n) {
+		return false
+	}
+	for n := n.Parent; n != nil; n = n.Parent {
+		if n.Type == html.ElementNode && s.Ancestor.Match(n) {
+			return true
 		}
 	}
 	return false
 }
 
 func (s *ChildSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.Parent != nil && s.Selector.Match(n) && s.Parent.Match(n.Parent)
+	return n.Type == html.ElementNode && n.Parent != nil &&
+		s.Selector.Match(n) && s.Parent.Match(n.Parent)
 }
 
 func (s *SubsequentSiblingSelector) Match(n *html.Node) bool {
-	if n.Type == html.ElementNode && s.Selector.Match(n) {
-		for n := n.PrevSibling; n != nil; n = n.PrevSibling {
-			if n.Type == html.ElementNode && s.Sibling.Match(n) {
-				return true
-			}
+	if n.Type != html.ElementNode || !s.Selector.Match(n) {
+		return false
+	}
+	for n := n.PrevSibling; n != nil; n = n.PrevSibling {
+		if n.Type == html.ElementNode && s.Sibling.Match(n) {
+			return true
 		}
 	}
 	return false
 }
 
 func (s *NextSiblingSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.PrevSibling != nil && s.Selector.Match(n) && s.Sibling.Match(n.PrevSibling)
+	return n.Type == html.ElementNode && n.PrevSibling != nil &&
+		s.Selector.Match(n) && s.Sibling.Match(n.PrevSibling)
 }
 
 func (s *UnionSelector) Match(n *html.Node) bool {
