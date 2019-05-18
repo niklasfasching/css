@@ -23,10 +23,9 @@ func MustCompile(selector string) Selector {
 }
 
 func First(s Selector, n *html.Node) *html.Node {
-	if s.Match(n) {
+	if n.Type == html.ElementNode && s.Match(n) {
 		return n
 	}
-
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		if n := First(s, c); n != nil {
 			return n
@@ -40,7 +39,7 @@ func All(s Selector, n *html.Node) []*html.Node {
 }
 
 func all(s Selector, n *html.Node, ns []*html.Node) []*html.Node {
-	if s.Match(n) {
+	if n.Type == html.ElementNode && s.Match(n) {
 		ns = append(ns, n)
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {

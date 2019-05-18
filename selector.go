@@ -112,28 +112,15 @@ var Combinators = map[string]func(Selector, Selector) Selector{
 func init() {
 	PseudoFunctions["not"] = func(args string) (func(*html.Node) bool, error) {
 		s, err := Compile(args)
-		return func(n *html.Node) bool { return n.Type == html.ElementNode && !s.Match(n) }, err
+		return func(n *html.Node) bool { return isElementNode(n) && !s.Match(n) }, err
 	}
 }
 
-func (s *UniversalSelector) Match(n *html.Node) bool { return n.Type == html.ElementNode }
-
-func (s *PseudoSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && s.match(n)
-}
-
-func (s *PseudoFunctionSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && s.match(n)
-}
-
-func (s *ElementSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.Data == s.Element
-}
-
+func (s *UniversalSelector) Match(n *html.Node) bool      { return true }
+func (s *PseudoSelector) Match(n *html.Node) bool         { return s.match(n) }
+func (s *PseudoFunctionSelector) Match(n *html.Node) bool { return s.match(n) }
+func (s *ElementSelector) Match(n *html.Node) bool        { return n.Data == s.Element }
 func (s *AttributeSelector) Match(n *html.Node) bool {
-	if n.Type != html.ElementNode {
-		return false
-	}
 	for _, a := range n.Attr {
 		if a.Key == s.Key {
 			return s.match(a.Val, s.Value)
@@ -142,10 +129,11 @@ func (s *AttributeSelector) Match(n *html.Node) bool {
 	return false
 }
 
+func (s *UnionSelector) Match(n *html.Node) bool {
+	return s.SelectorA.Match(n) || s.SelectorB.Match(n)
+}
+
 func (s *SelectorSequence) Match(n *html.Node) bool {
-	if n.Type != html.ElementNode {
-		return false
-	}
 	for i := len(s.Selectors) - 1; i >= 0; i-- {
 		if !s.Selectors[i].Match(n) {
 			return false
@@ -155,7 +143,7 @@ func (s *SelectorSequence) Match(n *html.Node) bool {
 }
 
 func (s *DescendantSelector) Match(n *html.Node) bool {
-	if n.Type != html.ElementNode || !s.Selector.Match(n) {
+	if !s.Selector.Match(n) {
 		return false
 	}
 	for n := n.Parent; n != nil; n = n.Parent {
@@ -167,12 +155,11 @@ func (s *DescendantSelector) Match(n *html.Node) bool {
 }
 
 func (s *ChildSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.Parent != nil &&
-		s.Selector.Match(n) && s.Parent.Match(n.Parent)
+	return s.Selector.Match(n) && isElementNode(n.Parent) && s.Parent.Match(n.Parent)
 }
 
 func (s *SubsequentSiblingSelector) Match(n *html.Node) bool {
-	if n.Type != html.ElementNode || !s.Selector.Match(n) {
+	if !s.Selector.Match(n) {
 		return false
 	}
 	for n := n.PrevSibling; n != nil; n = n.PrevSibling {
@@ -184,10 +171,5 @@ func (s *SubsequentSiblingSelector) Match(n *html.Node) bool {
 }
 
 func (s *NextSiblingSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.PrevSibling != nil &&
-		s.Selector.Match(n) && s.Sibling.Match(n.PrevSibling)
-}
-
-func (s *UnionSelector) Match(n *html.Node) bool {
-	return n.Type == html.ElementNode && (s.SelectorA.Match(n) || s.SelectorB.Match(n))
+	return s.Selector.Match(n) && isElementNode(n.PrevSibling) && s.Sibling.Match(n.PrevSibling)
 }

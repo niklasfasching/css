@@ -16,9 +16,6 @@ var (
 )
 
 func isEmpty(n *html.Node) bool {
-	if n.Type != html.ElementNode {
-		return false
-	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		if c.Type == html.ElementNode || c.Type == html.TextNode {
 			return false
@@ -28,18 +25,15 @@ func isEmpty(n *html.Node) bool {
 }
 
 func isInput(n *html.Node) bool {
-	return n.Type == html.ElementNode && (n.Data == "input" || n.Data == "textarea")
+	return n.Data == "input" || n.Data == "textarea"
 }
 
 func isRoot(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.Parent != nil && n.Parent.Type == html.DocumentNode
+	return n.Parent != nil && n.Parent.Type == html.DocumentNode
 }
 
 func onlyChild(ofType bool) func(*html.Node) bool {
 	return func(n *html.Node) bool {
-		if n.Type != html.ElementNode {
-			return false
-		}
 		if n.Parent == nil {
 			return true
 		}
@@ -79,9 +73,6 @@ func nthSibling(next func(*html.Node) *html.Node, ofType bool) func(string) (fun
 	return func(args string) (func(*html.Node) bool, error) {
 		a, b, err := parseNthArgs(args)
 		return func(n *html.Node) bool {
-			if n.Type != html.ElementNode {
-				return false
-			}
 			nth := 1
 			for s := next(n); s != nil; s = next(s) {
 				if s.Type == html.ElementNode && (!ofType || s.Data == n.Data) {
@@ -122,9 +113,6 @@ func isNth(a, b, y int) bool {
 }
 
 func hasAttribute(n *html.Node, key string) bool {
-	if n.Type != html.ElementNode {
-		return false
-	}
 	for _, a := range n.Attr {
 		if a.Key == key {
 			return true
@@ -151,4 +139,8 @@ func includeMatch(value, sValue string) bool {
 			value = value[i+1:]
 		}
 	}
+}
+
+func isElementNode(n *html.Node) bool {
+	return n != nil && n.Type == html.ElementNode
 }
