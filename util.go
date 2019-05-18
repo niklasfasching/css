@@ -121,12 +121,11 @@ func hasAttribute(n *html.Node, key string) bool {
 	return false
 }
 
-func attributeSelector(key, value, kind string) Selector {
-	s := AttributeSelector{key, value, kind, Matchers[kind]}
-	if s.match == nil {
-		panic("invalid match type for attribute selector: " + s.Type)
+func attributeSelector(key, value, kind string) *AttributeSelector {
+	if Matchers[kind] == nil {
+		panic("invalid match type for attribute selector: " + kind)
 	}
-	return &s
+	return &AttributeSelector{key, value, kind, Matchers[kind]}
 }
 
 func includeMatch(value, sValue string) bool {

@@ -70,10 +70,10 @@ loop:
 		switch p.peek().category {
 		case tokenClass:
 			class := strings.ToLower(p.next().string)
-			s.Selectors = append(s.Selectors, attributeSelector("class", class, "~="))
+			s.Selectors = append(s.Selectors, &ClassSelector{attributeSelector("class", class, "~=")})
 		case tokenID:
 			id := strings.ToLower(p.next().string)
-			s.Selectors = append(s.Selectors, attributeSelector("id", id, "="))
+			s.Selectors = append(s.Selectors, &IDSelector{attributeSelector("id", id, "=")})
 		case tokenBracketOpen:
 			as, err := p.parseAttributeSelector()
 			if err != nil {
