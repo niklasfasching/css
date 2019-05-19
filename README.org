@@ -1,11 +1,60 @@
 * css selectors for go [[https://travis-ci.org/niklasfasching/css.svg?branch=master]]
 Yet another package implementing a css selector compiler for go - see e.g. [[https://github.com/ericchiang/css/][github.com/ericchiang/css]] and [[https://github.com/andybalholm/cascadia][github.com/andybalholm/cascadia]] for prior art.
+
+#+begin_src sh
+go get github.com/niklasfasching/css
+#+end_src
+
+- Extensible (allows for user defined pseudo-classes/functions, matchers and combinators)
+- Conversion from compiled Selector back to Selector string
+
+#+begin_src go
+import (
+	"log"
+	"strings"
+
+	"github.com/niklasfasching/css"
+	"golang.org/x/net/html"
+)
+
+func main() {
+	doc, _ := html.Parse(strings.NewReader(`
+      <p>
+      <span class="a">apple</span>
+      <span class="b">banana</span>
+      <span class="b">berry</span>
+      <span class="c">pear</span>
+      </p>
+    `))
+
+	selector := css.MustCompile("p > span.b")
+	nodes := css.All(selector, doc)
+	log.Println(renderHTML(nodes)) // [<span class="b">banana</span> <span class="b">berry</span>]
+	log.Printf("Converted back to string: %s", selector) // Converted back to string: p > span.b
+}
+
+func renderHTML(ns []*html.Node) []string {
+	out := make([]string, len(ns))
+	for i, n := range ns {
+		var s strings.Builder
+		err := html.Render(&s, n)
+		if err != nil {
+			panic(err)
+		}
+		out[i] = s.String()
+	}
+	return out
+}
+#+end_src
+
 ** but why?
 for fun - don't use this!
 
 - It seemed easy enough to do
 - I've been really into writing parsers lately and this felt a belt more complicated than a lisp
 - I enjoy web scraping and wanted to learn more about underlying concepts
+- I wanted to learn more about profiling go - and this seemed like a good playground
+
 * todo
 - escape handling (string/ident)
 - investigate right-to-left matching (fb55)
