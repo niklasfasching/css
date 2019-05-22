@@ -20,6 +20,18 @@
         ]
       }
     },
+    "div.matched": {
+      "Selectors": [
+        {
+          "Element": "div"
+        },
+        {
+          "Key": "class",
+          "Value": "matched",
+          "Type": "~="
+        }
+      ]
+    },
     "li:nth-child(2n)": {
       "Selectors": [
         {
@@ -142,6 +154,25 @@
     ".pear, .apple": [
       "<li class=\"apple\">Apple</li>",
       "<li class=\"pear\">Pear</li>"
+    ],
+    "div.matched": [
+      "<div class=\"matched\">\n  <div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n    <div class=\"matched\"></div>\n  </div>\n</div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>",
+      "<div class=\"matched\"></div>"
     ],
     "li:nth-child(2n)": [
       "<li class=\"orange\">Orange</li>"

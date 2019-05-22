@@ -141,8 +141,8 @@ func (s *UnionSelector) Match(n *html.Node) bool {
 }
 
 func (s *SelectorSequence) Match(n *html.Node) bool {
-	for i := len(s.Selectors) - 1; i >= 0; i-- {
-		if !s.Selectors[i].Match(n) {
+	for _, s := range s.Selectors {
+		if !s.Match(n) {
 			return false
 		}
 	}
