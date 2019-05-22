@@ -57,7 +57,9 @@ for fun - don't use this!
 
 * todo
 - escape handling (string/ident)
-- investigate right-to-left matching (fb55)
+  - https://github.com/mathiasbynens/CSS.escape/blob/master/tests/tests.js
+  - https://www.w3.org/International/questions/qa-escapes
+  - https://mathiasbynens.be/notes/css-escapes
 * resources
 - https://github.com/andybalholm/cascadia
 - https://github.com/ericchiang/css
