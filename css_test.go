@@ -48,8 +48,15 @@ func TestCSS(t *testing.T) {
 			if !reflect.DeepEqual(interfacify(actual), expected) {
 				t.Errorf("%s\ngot:\n\t'%s'\n\nexpected:\n\t'%s'", selector, jsonify(actual), jsonify(expected))
 			}
-			if compiled != nil && compiled.String() != selector {
+			if compiled == nil {
+				continue
+			}
+			if compiled.String() != selector {
 				t.Errorf("%s: bad string conversion\ngot:\n\t'%s'\n\nexpected:\n\t'%s'", selector, compiled, selector)
+			}
+			expected, actual = result.Selections[selector], renderHTML(All(compiled, document))
+			if !reflect.DeepEqual(actual, expected) {
+				t.Errorf("%s\ngot:\n\t'%#v'\n\nexpected:\n\t'%#v'", selector, actual, expected)
 			}
 		}
 	}
