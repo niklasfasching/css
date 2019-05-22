@@ -94,10 +94,7 @@ func nthSiblingCompiled(next func(*html.Node) *html.Node, args string, ofType bo
 
 func atoi(s, fallback string) (int, error) {
 	s = whitespaceRegexp.ReplaceAllString(s, "")
-	if s == "" {
-		return 0, nil
-	}
-	if s == "+" || s == "-" {
+	if s == "" || s == "+" || s == "-" {
 		s = s + fallback
 	}
 	return strconv.Atoi(s)

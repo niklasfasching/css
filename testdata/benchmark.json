@@ -185,7 +185,8 @@
       "<li class=\"pear\">Pear</li>"
     ],
     "li:nth-child(n+2)": [
-      "<li class=\"orange\">Orange</li>"
+      "<li class=\"orange\">Orange</li>",
+      "<li class=\"pear\">Pear</li>"
     ],
     "li:nth-child(odd)": [
       "<li class=\"apple\">Apple</li>",
