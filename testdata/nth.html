@@ -1,17 +1,38 @@
-<html>
-  <head></head>
-  <body>
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>10</li>
-    </ul>
-  </body>
-</html>
+<!DOCTYPE HTML>
+<style>
+ li:nth-child(1n- 2) {}
+
+ li:nth-child(2n+1) {}
+
+ li:nth-child(odd) {}
+
+ li:nth-child(2n+0) {}
+
+ li:nth-child(2n) {}
+
+ li:nth-child(n+2) {}
+
+ li:nth-child(+6) {}
+
+ li:nth-child(even) {}
+
+ li:nth-child(-n+2) {}
+
+ li:nth-child( +3n - 2 ) {}
+
+ li:nth-child( -1n2 ) {}
+
+ ul :not(li:nth-child(even)) {}
+</style>
+<ul>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+  <li>5</li>
+  <li>6</li>
+  <li>7</li>
+  <li>8</li>
+  <li>9</li>
+  <li>10</li>
+</ul>

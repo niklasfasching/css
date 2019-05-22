@@ -9,6 +9,7 @@ import (
 	"log"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -31,13 +32,12 @@ func TestCSS(t *testing.T) {
 		t.Skip()
 	}
 
-	for _, path := range selectorFiles() {
+	for _, path := range htmlFiles() {
 		log.Println(path)
 		result := readResult(path)
-		selectors := strings.Split(readFileString(path), "\n\n\n")
+		document, selectors := readHTML(path)
 		for _, selector := range selectors {
-			selector = strings.TrimSpace(selector)
-			var actual interface{}
+			actual := interface{}(nil)
 			compiled, err := Compile(selector)
 			if err != nil {
 				actual = err.Error()
@@ -82,18 +82,18 @@ func benchmark(b *testing.B, compile func(string) func(*html.Node) []*html.Node)
 			b.Skip(err)
 		}
 	}()
-	path := "testdata/benchmark.txt"
-	htmlString, result := readHTML(path), readResult(path)
-	for _, selector := range strings.Split(readFileString(path), "\n\n\n") {
-		selector = strings.TrimSpace(selector)
+	path := "testdata/benchmark.html"
+	document, selectors := readHTML(path)
+	result := readResult(path)
+	for _, selector := range selectors {
 		matchAll := compile(selector)
 		var selection []*html.Node
 		for n := 0; n < b.N; n++ {
-			selection = matchAll(htmlString)
+			selection = matchAll(document)
 		}
-		if !reflect.DeepEqual(renderHTML(selection), result.Selections[selector]) {
-			log.Printf("Bad result for %s:\nGot: %v\nExpected: %v",
-				selector, renderHTML(selection), result.Selections[selector])
+		actual, expected := renderHTML(selection), result.Selections[selector]
+		if !reflect.DeepEqual(actual, expected) {
+			b.Logf("%s\n\tgot:\n\t'%#v'\n\n\texpected:\n\t'%#v'", selector, actual, expected)
 		}
 	}
 }
@@ -111,25 +111,21 @@ func interfacify(in interface{}) (out interface{}) {
 }
 
 func update() {
-	for _, path := range selectorFiles() {
+	for _, path := range htmlFiles() {
 		log.Println(path)
 		result := Result{
 			Selectors:  map[string]interface{}{},
 			Selections: map[string][]string{},
 		}
-		html := readHTML(path)
-		selectors := strings.Split(readFileString(path), "\n\n\n")
+		document, selectors := readHTML(path)
 		for _, selector := range selectors {
-			selector = strings.TrimSpace(selector)
 			compiled, err := Compile(selector)
 			if err != nil {
 				result.Selectors[selector] = err.Error()
 				continue
 			}
 			result.Selectors[selector] = compiled
-			if html != nil {
-				result.Selections[selector] = renderHTML(All(compiled, html))
-			}
+			result.Selections[selector] = renderHTML(All(compiled, document))
 		}
 		writeResult(path, result)
 	}
@@ -148,46 +144,41 @@ func renderHTML(ns []*html.Node) []string {
 	return out
 }
 
-func selectorFiles() []string {
+func htmlFiles() (out []string) {
 	dir := "./testdata"
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		panic(fmt.Sprintf("Could not read directory: %s", err))
 	}
-	selectorFiles := []string{}
 	for _, f := range files {
 		name := f.Name()
-		if filepath.Ext(name) != ".txt" {
+		if filepath.Ext(name) != ".html" {
 			continue
 		}
-		selectorFiles = append(selectorFiles, filepath.Join(dir, name))
+		out = append(out, filepath.Join(dir, name))
 	}
-	return selectorFiles
+	return out
 }
 
-func readFileString(path string) string {
+func readHTML(path string) (n *html.Node, selectors []string) {
 	bs, err := ioutil.ReadFile(path)
-	if err != nil {
-		return ""
-	}
-	return string(bs)
-}
-
-func readHTML(selectorFilePath string) *html.Node {
-	path := selectorFilePath[:len(selectorFilePath)-len(".txt")] + ".html"
-	bs, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil
-	}
-	n, err := html.Parse(bytes.NewReader(bs))
 	if err != nil {
 		panic(err)
 	}
-	return n
+	n, err = html.Parse(bytes.NewReader(bs))
+	if err != nil {
+		panic(err)
+	}
+	selectorsText := html.UnescapeString(First(MustCompile("style"), n).FirstChild.Data)
+	selectors = regexp.MustCompile(`\s*{.*}\s*`).Split(strings.TrimSpace(selectorsText), -1)
+	if l := len(selectors); l > 0 && selectors[l-1] == "" {
+		selectors = selectors[:l-1]
+	}
+	return n, selectors
 }
 
-func readResult(selectorFilePath string) (result Result) {
-	path := selectorFilePath[:len(selectorFilePath)-len(".txt")] + ".json"
+func readResult(htmlFilePath string) (result Result) {
+	path := htmlFilePath[:len(htmlFilePath)-len(".html")] + ".json"
 	bs, err := ioutil.ReadFile(path)
 	if err != nil {
 		bs = []byte("{}")
@@ -199,8 +190,8 @@ func readResult(selectorFilePath string) (result Result) {
 	return result
 }
 
-func writeResult(selectorFilePath string, result Result) {
-	path := selectorFilePath[:len(selectorFilePath)-len(".txt")] + ".json"
+func writeResult(htmlFilePath string, result Result) {
+	path := htmlFilePath[:len(htmlFilePath)-len(".html")] + ".json"
 	b := &bytes.Buffer{}
 	encoder := json.NewEncoder(b)
 	encoder.SetEscapeHTML(false)

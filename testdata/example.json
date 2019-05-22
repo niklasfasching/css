@@ -89,7 +89,7 @@
       "<li class=\"pear\">Pear</li>"
     ],
     "ul": [
-      "<ul id=\"fruits\">\n      <li class=\"apple\">Apple</li>\n      <li class=\"orange\">Orange</li>\n      <li class=\"pear\">Pear</li>\n    </ul>"
+      "<ul id=\"fruits\">\n  <li class=\"apple\">Apple</li>\n  <li class=\"orange\">Orange</li>\n  <li class=\"pear\">Pear</li>\n</ul>"
     ],
     "ul *.pear": [
       "<li class=\"pear\">Pear</li>"
