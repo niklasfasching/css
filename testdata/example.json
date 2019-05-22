@@ -20,6 +20,28 @@
         ]
       }
     },
+    "li:contains(\"Ora\")": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "contains",
+          "Args": "(\"Ora\")"
+        }
+      ]
+    },
+    "li:contains(nge)": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Name": "contains",
+          "Args": "(nge)"
+        }
+      ]
+    },
     "ul": {
       "Selectors": [
         {
@@ -87,6 +109,12 @@
     ".pear, .apple": [
       "<li class=\"apple\">Apple</li>",
       "<li class=\"pear\">Pear</li>"
+    ],
+    "li:contains(\"Ora\")": [
+      "<li class=\"orange\">Orange</li>"
+    ],
+    "li:contains(nge)": [
+      "<li class=\"orange\">Orange</li>"
     ],
     "ul": [
       "<ul id=\"fruits\">\n  <li class=\"apple\">Apple</li>\n  <li class=\"orange\">Orange</li>\n  <li class=\"pear\">Pear</li>\n</ul>"

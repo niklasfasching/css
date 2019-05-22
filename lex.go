@@ -261,6 +261,7 @@ func lexFunctionArguments(l *lexer) stateFn {
 		case ')':
 			lvl--
 		case '"', '\'':
+			l.backup()
 			if err := acceptString(l); err != nil {
 				return l.errorf("%s", err)
 			}
