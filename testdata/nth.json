@@ -7,7 +7,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "( +3n - 2 )"
+          "Args": " +3n - 2 "
         }
       ]
     },
@@ -18,7 +18,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "( -1n2 )"
+          "Args": " -1n2 "
         }
       ]
     },
@@ -29,7 +29,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(+6)"
+          "Args": "+6"
         }
       ]
     },
@@ -40,7 +40,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(-n+2)"
+          "Args": "-n+2"
         }
       ]
     },
@@ -51,7 +51,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(1n- 2)"
+          "Args": "1n- 2"
         }
       ]
     },
@@ -62,7 +62,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(2n)"
+          "Args": "2n"
         }
       ]
     },
@@ -73,7 +73,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(2n+0)"
+          "Args": "2n+0"
         }
       ]
     },
@@ -84,7 +84,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(2n+1)"
+          "Args": "2n+1"
         }
       ]
     },
@@ -95,7 +95,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(even)"
+          "Args": "even"
         }
       ]
     },
@@ -106,7 +106,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(n+2)"
+          "Args": "n+2"
         }
       ]
     },
@@ -117,7 +117,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(odd)"
+          "Args": "odd"
         }
       ]
     },
@@ -133,7 +133,7 @@
         "Selectors": [
           {
             "Name": "not",
-            "Args": "(li:nth-child(even))"
+            "Args": "li:nth-child(even)"
           }
         ]
       }

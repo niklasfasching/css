@@ -27,7 +27,7 @@
         },
         {
           "Name": "contains",
-          "Args": "(\"Ora\")"
+          "Args": "\"Ora\""
         }
       ]
     },
@@ -38,7 +38,7 @@
         },
         {
           "Name": "contains",
-          "Args": "(nge)"
+          "Args": "nge"
         }
       ]
     },

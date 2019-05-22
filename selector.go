@@ -185,7 +185,7 @@ func (s *UniversalSelector) String() string      { return "*" }
 func (s *ClassSelector) String() string          { return "." + s.Value }
 func (s *IDSelector) String() string             { return "#" + s.Value }
 func (s *PseudoSelector) String() string         { return ":" + s.Name }
-func (s *PseudoFunctionSelector) String() string { return fmt.Sprintf(":%s%s", s.Name, s.Args) }
+func (s *PseudoFunctionSelector) String() string { return fmt.Sprintf(":%s(%s)", s.Name, s.Args) }
 func (s *ElementSelector) String() string        { return s.Element }
 func (s *UnionSelector) String() string          { return fmt.Sprintf("%s, %s", s.SelectorA, s.SelectorB) }
 func (s *DescendantSelector) String() string     { return fmt.Sprintf("%s %s", s.Ancestor, s.Selector) }

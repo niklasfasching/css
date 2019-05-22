@@ -39,7 +39,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(2n)"
+          "Args": "2n"
         }
       ]
     },
@@ -50,7 +50,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(2n+0)"
+          "Args": "2n+0"
         }
       ]
     },
@@ -61,7 +61,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(2n+1)"
+          "Args": "2n+1"
         }
       ]
     },
@@ -72,7 +72,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(n+2)"
+          "Args": "n+2"
         }
       ]
     },
@@ -83,7 +83,7 @@
         },
         {
           "Name": "nth-child",
-          "Args": "(odd)"
+          "Args": "odd"
         }
       ]
     },

@@ -144,7 +144,10 @@ func (p *parser) parsePseudoFunctionSelector() (Selector, error) {
 		return nil, errors.New("expected pseudo function arguments")
 	}
 	args := p.next().string
-	match, err := f(args[1 : len(args)-1])
+	if len(args) != 0 {
+		args = args[1 : len(args)-1] // strip ()
+	}
+	match, err := f(args)
 	if err != nil {
 		return nil, err
 	}
