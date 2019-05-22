@@ -95,6 +95,7 @@ var PseudoFunctions = map[string]func(string) (func(*html.Node) bool, error){
 	"nth-last-child":   nthSibling(func(n *html.Node) *html.Node { return n.NextSibling }, false),
 	"nth-of-type":      nthSibling(func(n *html.Node) *html.Node { return n.PrevSibling }, true),
 	"nth-last-of-type": nthSibling(func(n *html.Node) *html.Node { return n.NextSibling }, true),
+	"contains":         contains,
 }
 
 var Matchers = map[string]func(string, string) bool{

@@ -140,6 +140,20 @@ func includeMatch(value, sValue string) bool {
 	}
 }
 
+func contains(substring string) (func(*html.Node) bool, error) {
+	if substring[0] == '"' && substring[len(substring)-1] == '"' {
+		substring = substring[1 : len(substring)-1]
+	}
+	return func(n *html.Node) bool {
+		var s strings.Builder
+		err := html.Render(&s, n)
+		if err != nil {
+			panic(err)
+		}
+		return strings.Contains(s.String(), substring)
+	}, nil
+}
+
 func isElementNode(n *html.Node) bool {
 	return n != nil && n.Type == html.ElementNode
 }
