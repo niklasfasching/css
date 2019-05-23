@@ -42,6 +42,30 @@
         }
       ]
     },
+    "li[class*=\"r\"]": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Key": "class",
+          "Value": "r",
+          "Type": "*="
+        }
+      ]
+    },
+    "li[class*=r]": {
+      "Selectors": [
+        {
+          "Element": "li"
+        },
+        {
+          "Key": "class",
+          "Value": "r",
+          "Type": "*="
+        }
+      ]
+    },
     "ul": {
       "Selectors": [
         {
@@ -115,6 +139,14 @@
     ],
     "li:contains(nge)": [
       "<li class=\"orange\">Orange</li>"
+    ],
+    "li[class*=\"r\"]": [
+      "<li class=\"orange\">Orange</li>",
+      "<li class=\"pear\">Pear</li>"
+    ],
+    "li[class*=r]": [
+      "<li class=\"orange\">Orange</li>",
+      "<li class=\"pear\">Pear</li>"
     ],
     "ul": [
       "<ul id=\"fruits\">\n  <li class=\"apple\">Apple</li>\n  <li class=\"orange\">Orange</li>\n  <li class=\"pear\">Pear</li>\n</ul>"

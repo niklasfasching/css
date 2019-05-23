@@ -116,22 +116,27 @@ func (p *parser) parseComplexSelectorSequence(s1 Selector) (Selector, error) {
 }
 
 func (p *parser) parseAttributeSelector() (Selector, error) {
-	if p.peek().category != tokenIdent {
-		return nil, errors.New("invalid attribute selector")
+	if t := p.next(); t.category != tokenBracketOpen {
+		return nil, fmt.Errorf("invalid attribute selector: expected [ but got %#v", t)
+	}
+	if t := p.peek(); t.category != tokenIdent {
+		return nil, fmt.Errorf("invalid attribute selector: expected identifier but got %#v", t)
 	}
 	key, matcher := strings.ToLower(p.next().string), p.parseMatcher()
 	if t := p.next(); matcher == "" && t.category == tokenBracketClose {
 		return attributeSelector(key, "", ""), nil
 	} else if matcher != "" && (t.category == tokenString || t.category == tokenIdent) {
-		if p.next().category == tokenBracketClose {
-			value := t.string
-			if t.category == tokenString {
-				value = value[1 : len(value)-2]
-			}
-			return attributeSelector(key, value, matcher), nil
+		if t := p.next(); t.category != tokenBracketClose {
+			return nil, fmt.Errorf("invalid attribute selector: expected ] but got %#v", t)
 		}
+		value := t.string
+		if t.category == tokenString {
+			value = value[1 : len(value)-1]
+		}
+		return attributeSelector(key, value, matcher), nil
+	} else {
+		return nil, fmt.Errorf("invalid attribute selector: expected ] or matcher & value but got %#v", t)
 	}
-	return nil, errors.New("invalid attribute selector")
 }
 
 func (p *parser) parsePseudoFunctionSelector() (Selector, error) {
