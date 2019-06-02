@@ -5,8 +5,10 @@ Yet another package implementing a css selector compiler for go - see e.g. [[htt
 go get github.com/niklasfasching/css
 #+end_src
 
+Differentiating features:
 - Extensible (allows for user defined pseudo-classes/functions, matchers and combinators)
 - Conversion from compiled Selector back to Selector string
+- Small (~800 LOC), simple/modular (separation into lexing, parsing & selecting) and fast (benchmarks put it head to head with cascadia)
 
 #+begin_src go
 import (
@@ -29,21 +31,22 @@ func main() {
 
 	selector := css.MustCompile("p > span.b")
 	nodes := css.All(selector, doc)
-	log.Println(renderHTML(nodes)) // [<span class="b">banana</span> <span class="b">berry</span>]
-	log.Printf("Converted back to string: %s", selector) // Converted back to string: p > span.b
-}
-
-func renderHTML(ns []*html.Node) []string {
-	out := make([]string, len(ns))
-	for i, n := range ns {
+	for _, n := range nodes {
 		var s strings.Builder
-		err := html.Render(&s, n)
-		if err != nil {
-			panic(err)
-		}
-		out[i] = s.String()
+		html.Render(&s, n)
+		log.Println(s.String())
 	}
-	return out
+	// <span class="b">banana</span>
+	// <span class="b">berry</span>
+
+	log.Printf("Converted back to string: %s", selector) // Converted back to string: p > span.b
+
+	// easy to add your own custom pseudo classes, pseudo functions, matchers & combinators
+	css.PseudoClasses["my-pseudo-p"] = func(n *html.Node) bool { return n.Data == "p" },
+	selector = css.MustCompile(":my-pseudo-p")
+	var s strings.Builder
+	html.Render(&s, css.First(selector, doc))
+	log.Println(s.String()) // <p>...</p>
 }
 #+end_src
 
