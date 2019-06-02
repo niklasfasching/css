@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<style>
+ body * {}
+
+ article {}
+
+ #foo {}
+
+ p#foo {}
+
+ *#foo {}
+
+ .ids {}
+
+ div.ids {}
+
+ *.ids {}
+
+ .ids.non-existant {}
+
+ .ids.group {}
+
+ p[id=foo] {}
+
+ p[id^=f] {}
+
+ p[id*=o] {}
+
+ p[id!=foo] {}
+
+ p[id$="oo"] {}
+
+ [class~=group] {}
+
+ [lang|="en"] {}
+
+ p[class$=""] {}
+
+ p[class^=""] {}
+
+ input {}
+
+ :checked {}
+
+ .a:not(#foo) {}
+
+ .ids :not(#bar) {}
+
+ .ids p:first-child {}
+
+ .ids p:last-child {}
+
+ :empty {}
+
+
+</style>
+<article>this is an article</article>
+<!-- comment -->
+<div class="group ids">
+  <p class="a" id="foo"></p>
+  <p class="b" id="bar"></p>
+</div>
+<div class="group misc">
+  <p lang="en"></p>
+  <p lang="en-us"></p>
+  <p lang="de-en"></p>
+  <input type="radio" checked/>
+</div>

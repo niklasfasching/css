@@ -1,0 +1,391 @@
+{
+  "Selectors": {
+    "#foo": {
+      "Selectors": [
+        {
+          "Key": "id",
+          "Value": "foo",
+          "Type": "="
+        }
+      ]
+    },
+    "*#foo": {
+      "Selectors": [
+        {
+          "Element": "*"
+        },
+        {
+          "Key": "id",
+          "Value": "foo",
+          "Type": "="
+        }
+      ]
+    },
+    "*.ids": {
+      "Selectors": [
+        {
+          "Element": "*"
+        },
+        {
+          "Key": "class",
+          "Value": "ids",
+          "Type": "~="
+        }
+      ]
+    },
+    ".a:not(#foo)": {
+      "Selectors": [
+        {
+          "Key": "class",
+          "Value": "a",
+          "Type": "~="
+        },
+        {
+          "Name": "not",
+          "Args": "#foo"
+        }
+      ]
+    },
+    ".ids": {
+      "Selectors": [
+        {
+          "Key": "class",
+          "Value": "ids",
+          "Type": "~="
+        }
+      ]
+    },
+    ".ids :not(#bar)": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Key": "class",
+            "Value": "ids",
+            "Type": "~="
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Name": "not",
+            "Args": "#bar"
+          }
+        ]
+      }
+    },
+    ".ids p:first-child": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Key": "class",
+            "Value": "ids",
+            "Type": "~="
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Element": "p"
+          },
+          {
+            "Name": "first-child"
+          }
+        ]
+      }
+    },
+    ".ids p:last-child": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Key": "class",
+            "Value": "ids",
+            "Type": "~="
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Element": "p"
+          },
+          {
+            "Name": "last-child"
+          }
+        ]
+      }
+    },
+    ".ids.group": {
+      "Selectors": [
+        {
+          "Key": "class",
+          "Value": "ids",
+          "Type": "~="
+        },
+        {
+          "Key": "class",
+          "Value": "group",
+          "Type": "~="
+        }
+      ]
+    },
+    ".ids.non-existant": {
+      "Selectors": [
+        {
+          "Key": "class",
+          "Value": "ids",
+          "Type": "~="
+        },
+        {
+          "Key": "class",
+          "Value": "non-existant",
+          "Type": "~="
+        }
+      ]
+    },
+    ":checked": {
+      "Selectors": [
+        {
+          "Name": "checked"
+        }
+      ]
+    },
+    ":empty": {
+      "Selectors": [
+        {
+          "Name": "empty"
+        }
+      ]
+    },
+    "[class~=group]": {
+      "Selectors": [
+        {
+          "Key": "class",
+          "Value": "group",
+          "Type": "~="
+        }
+      ]
+    },
+    "[lang|=\"en\"]": {
+      "Selectors": [
+        {
+          "Key": "lang",
+          "Value": "en",
+          "Type": "|="
+        }
+      ]
+    },
+    "article": {
+      "Selectors": [
+        {
+          "Element": "article"
+        }
+      ]
+    },
+    "body *": {
+      "Ancestor": {
+        "Selectors": [
+          {
+            "Element": "body"
+          }
+        ]
+      },
+      "Selector": {
+        "Selectors": [
+          {
+            "Element": "*"
+          }
+        ]
+      }
+    },
+    "div.ids": {
+      "Selectors": [
+        {
+          "Element": "div"
+        },
+        {
+          "Key": "class",
+          "Value": "ids",
+          "Type": "~="
+        }
+      ]
+    },
+    "input": {
+      "Selectors": [
+        {
+          "Element": "input"
+        }
+      ]
+    },
+    "p#foo": {
+      "Selectors": [
+        {
+          "Element": "p"
+        },
+        {
+          "Key": "id",
+          "Value": "foo",
+          "Type": "="
+        }
+      ]
+    },
+    "p[class$=\"\"]": {
+      "Selectors": [
+        {
+          "Element": "p"
+        },
+        {
+          "Key": "class",
+          "Value": "",
+          "Type": "$="
+        }
+      ]
+    },
+    "p[class^=\"\"]": {
+      "Selectors": [
+        {
+          "Element": "p"
+        },
+        {
+          "Key": "class",
+          "Value": "",
+          "Type": "^="
+        }
+      ]
+    },
+    "p[id!=foo]": "invalid starting char for identifier",
+    "p[id$=\"oo\"]": {
+      "Selectors": [
+        {
+          "Element": "p"
+        },
+        {
+          "Key": "id",
+          "Value": "oo",
+          "Type": "$="
+        }
+      ]
+    },
+    "p[id*=o]": {
+      "Selectors": [
+        {
+          "Element": "p"
+        },
+        {
+          "Key": "id",
+          "Value": "o",
+          "Type": "*="
+        }
+      ]
+    },
+    "p[id=foo]": {
+      "Selectors": [
+        {
+          "Element": "p"
+        },
+        {
+          "Key": "id",
+          "Value": "foo",
+          "Type": "="
+        }
+      ]
+    },
+    "p[id^=f]": {
+      "Selectors": [
+        {
+          "Element": "p"
+        },
+        {
+          "Key": "id",
+          "Value": "f",
+          "Type": "^="
+        }
+      ]
+    }
+  },
+  "Selections": {
+    "#foo": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    "*#foo": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    "*.ids": [
+      "<div class=\"group ids\">\n  <p class=\"a\" id=\"foo\"></p>\n  <p class=\"b\" id=\"bar\"></p>\n</div>"
+    ],
+    ".a:not(#foo)": [],
+    ".ids": [
+      "<div class=\"group ids\">\n  <p class=\"a\" id=\"foo\"></p>\n  <p class=\"b\" id=\"bar\"></p>\n</div>"
+    ],
+    ".ids :not(#bar)": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    ".ids p:first-child": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    ".ids p:last-child": [
+      "<p class=\"b\" id=\"bar\"></p>"
+    ],
+    ".ids.group": [
+      "<div class=\"group ids\">\n  <p class=\"a\" id=\"foo\"></p>\n  <p class=\"b\" id=\"bar\"></p>\n</div>"
+    ],
+    ".ids.non-existant": [],
+    ":checked": [
+      "<input type=\"radio\" checked=\"\"/>"
+    ],
+    ":empty": [
+      "<p class=\"a\" id=\"foo\"></p>",
+      "<p class=\"b\" id=\"bar\"></p>",
+      "<p lang=\"en\"></p>",
+      "<p lang=\"en-us\"></p>",
+      "<p lang=\"de-en\"></p>",
+      "<input type=\"radio\" checked=\"\"/>"
+    ],
+    "[class~=group]": [
+      "<div class=\"group ids\">\n  <p class=\"a\" id=\"foo\"></p>\n  <p class=\"b\" id=\"bar\"></p>\n</div>",
+      "<div class=\"group misc\">\n  <p lang=\"en\"></p>\n  <p lang=\"en-us\"></p>\n  <p lang=\"de-en\"></p>\n  <input type=\"radio\" checked=\"\"/>\n</div>"
+    ],
+    "[lang|=\"en\"]": [
+      "<p lang=\"en\"></p>",
+      "<p lang=\"en-us\"></p>"
+    ],
+    "article": [
+      "<article>this is an article</article>"
+    ],
+    "body *": [
+      "<article>this is an article</article>",
+      "<div class=\"group ids\">\n  <p class=\"a\" id=\"foo\"></p>\n  <p class=\"b\" id=\"bar\"></p>\n</div>",
+      "<p class=\"a\" id=\"foo\"></p>",
+      "<p class=\"b\" id=\"bar\"></p>",
+      "<div class=\"group misc\">\n  <p lang=\"en\"></p>\n  <p lang=\"en-us\"></p>\n  <p lang=\"de-en\"></p>\n  <input type=\"radio\" checked=\"\"/>\n</div>",
+      "<p lang=\"en\"></p>",
+      "<p lang=\"en-us\"></p>",
+      "<p lang=\"de-en\"></p>",
+      "<input type=\"radio\" checked=\"\"/>"
+    ],
+    "div.ids": [
+      "<div class=\"group ids\">\n  <p class=\"a\" id=\"foo\"></p>\n  <p class=\"b\" id=\"bar\"></p>\n</div>"
+    ],
+    "input": [
+      "<input type=\"radio\" checked=\"\"/>"
+    ],
+    "p#foo": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    "p[class$=\"\"]": [],
+    "p[class^=\"\"]": [],
+    "p[id$=\"oo\"]": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    "p[id*=o]": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    "p[id=foo]": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ],
+    "p[id^=f]": [
+      "<p class=\"a\" id=\"foo\"></p>"
+    ]
+  }
+}

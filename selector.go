@@ -101,10 +101,10 @@ var PseudoFunctions = map[string]func(string) (func(*html.Node) bool, error){
 var Matchers = map[string]func(string, string) bool{
 	"~=": includeMatch,
 	"|=": func(av, sv string) bool { return av == sv || strings.HasPrefix(av, sv+"-") },
-	"^=": func(av, sv string) bool { return strings.HasPrefix(av, sv) },
-	"$=": func(av, sv string) bool { return strings.HasSuffix(av, sv) },
+	"^=": func(av, sv string) bool { return sv != "" && strings.HasPrefix(av, sv) },
+	"$=": func(av, sv string) bool { return sv != "" && strings.HasSuffix(av, sv) },
 	"*=": func(av, sv string) bool { return strings.Contains(av, sv) },
-	"=":  func(av, sv string) bool { return av == av },
+	"=":  func(av, sv string) bool { return av == sv },
 	"":   func(string, string) bool { return true },
 }
 
