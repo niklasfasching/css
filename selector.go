@@ -181,25 +181,27 @@ func (s *NextSiblingSelector) Match(n *html.Node) bool {
 	return s.Selector.Match(n) && isElementNode(n.PrevSibling) && s.Sibling.Match(n.PrevSibling)
 }
 
-func (s *UniversalSelector) String() string      { return "*" }
-func (s *ClassSelector) String() string          { return "." + s.Value }
-func (s *IDSelector) String() string             { return "#" + s.Value }
-func (s *PseudoSelector) String() string         { return ":" + s.Name }
-func (s *PseudoFunctionSelector) String() string { return fmt.Sprintf(":%s(%s)", s.Name, s.Args) }
-func (s *ElementSelector) String() string        { return s.Element }
-func (s *UnionSelector) String() string          { return fmt.Sprintf("%s, %s", s.SelectorA, s.SelectorB) }
-func (s *DescendantSelector) String() string     { return fmt.Sprintf("%s %s", s.Ancestor, s.Selector) }
-func (s *ChildSelector) String() string          { return fmt.Sprintf("%s > %s", s.Parent, s.Selector) }
-func (s *NextSiblingSelector) String() string    { return fmt.Sprintf("%s + %s", s.Sibling, s.Selector) }
+func (s *UniversalSelector) String() string { return "*" }
+func (s *ClassSelector) String() string     { return "." + EscapeIdentifier(s.Value) }
+func (s *IDSelector) String() string        { return "#" + EscapeIdentifier(s.Value) }
+func (s *PseudoSelector) String() string    { return ":" + EscapeIdentifier(s.Name) }
+func (s *PseudoFunctionSelector) String() string {
+	return fmt.Sprintf(":%s(%s)", EscapeIdentifier(s.Name), s.Args)
+}
+func (s *ElementSelector) String() string     { return s.Element }
+func (s *UnionSelector) String() string       { return fmt.Sprintf("%s, %s", s.SelectorA, s.SelectorB) }
+func (s *DescendantSelector) String() string  { return fmt.Sprintf("%s %s", s.Ancestor, s.Selector) }
+func (s *ChildSelector) String() string       { return fmt.Sprintf("%s > %s", s.Parent, s.Selector) }
+func (s *NextSiblingSelector) String() string { return fmt.Sprintf("%s + %s", s.Sibling, s.Selector) }
 func (s *SubsequentSiblingSelector) String() string {
 	return fmt.Sprintf("%s ~ %s", s.Sibling, s.Selector)
 }
 
 func (s *AttributeSelector) String() string {
 	if s.Type == "" {
-		return fmt.Sprintf("[%s]", s.Key)
+		return fmt.Sprintf("[%s]", EscapeIdentifier(s.Key))
 	}
-	return fmt.Sprintf("[%s%s%q]", s.Key, s.Type, s.Value)
+	return fmt.Sprintf("[%s%s%q]", EscapeIdentifier(s.Key), s.Type, EscapeString(s.Value))
 }
 
 func (s *SelectorSequence) String() string {

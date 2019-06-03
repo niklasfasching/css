@@ -1,0 +1,30 @@
+{
+  "Selectors": {
+    ".\\#foo": {
+      "Selectors": [
+        {
+          "Key": "class",
+          "Value": "#foo",
+          "Type": "~="
+        }
+      ]
+    },
+    "[\\#foo=\\.bar]": {
+      "Selectors": [
+        {
+          "Key": "#foo",
+          "Value": ".bar",
+          "Type": "="
+        }
+      ]
+    }
+  },
+  "Selections": {
+    ".\\#foo": [
+      "<p class=\"#foo\">this one</p>"
+    ],
+    "[\\#foo=\\.bar]": [
+      "<p #foo=\".bar\">this one</p>"
+    ]
+  }
+}

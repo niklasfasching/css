@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -79,7 +80,12 @@ func (l *lexer) backup() {
 }
 
 func (l *lexer) emit(c tokenCategory) {
-	l.tokens = append(l.tokens, token{c, l.input[l.start:l.index], l.start})
+	switch c {
+	case tokenClass, tokenIdent, tokenID, tokenPseudoClass, tokenPseudoFunction, tokenString:
+		l.tokens = append(l.tokens, token{c, Unescape(l.input[l.start:l.index]), l.start})
+	default:
+		l.tokens = append(l.tokens, token{c, l.input[l.start:l.index], l.start})
+	}
 	l.start = l.index
 }
 
@@ -150,20 +156,46 @@ func lexSpace(l *lexer) stateFn {
 // isNameStart checks whether rune r is a valid character as the start of a name
 // [_a-z]|{nonascii}|{escape}
 func isNameStart(r rune) bool {
-	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || r == '_' || r > 127
+	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || r == '_' || r == '\\' || r > 127
 }
 
 // isNameChar checks whether rune r is a valid character as a part of a name
 // [_a-z0-9-]|{nonascii}|{escape}
 func isNameChar(r rune) bool {
 	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || '0' <= r && r <= '9' ||
-		r == '_' || r == '-' || r > 127
+		r == '_' || r == '-' || r == '\\' || r > 127
+}
+
+func isHexDigit(r rune) bool {
+	return 'a' <= r && r <= 'f' || 'A' <= r && r <= 'F' || '0' <= r && r <= '9'
 }
 
 func isWhitespace(r rune) bool     { return strings.ContainsRune(" \t\f\r\n", r) }
 func isDigit(r rune) bool          { return '0' <= r && r <= '9' }
 func isMatchChar(r rune) bool      { return Matchers[string(r)+"="] != nil }
 func isCombinatorChar(r rune) bool { return Combinators[string(r)] != nil }
+
+func acceptNameChars(l *lexer) {
+	for {
+		switch r := l.next(); {
+		case r == '\\':
+			if !isHexDigit(l.peek()) {
+				l.next()
+				continue
+			}
+			for i := 0; i < 6 && isHexDigit(l.peek()); i++ {
+				l.next()
+			}
+			if unicode.IsSpace(l.peek()) {
+				l.next()
+			}
+		case isNameChar(r):
+		default:
+			l.backup()
+			return
+		}
+	}
+}
 
 func acceptIdentifier(l *lexer) error {
 	if l.peek() == '-' {
@@ -172,7 +204,7 @@ func acceptIdentifier(l *lexer) error {
 	if !isNameStart(l.peek()) {
 		return errors.New("invalid starting char for identifier")
 	}
-	l.acceptRun(isNameChar)
+	acceptNameChars(l)
 	return nil
 }
 
@@ -215,7 +247,7 @@ func lexID(l *lexer) stateFn {
 	if !isNameChar(l.peek()) {
 		l.errorf("invalid starting char for ID")
 	}
-	l.acceptRun(isNameChar)
+	acceptNameChars(l)
 	l.emit(tokenID)
 	return lexSpace
 }
