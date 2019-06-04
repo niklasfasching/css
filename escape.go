@@ -64,7 +64,6 @@ func Unescape(escaped string) (unescaped string) {
 			j := i
 			for ; j < i+6 && j < len(escaped) && isHexDigit(rune(escaped[j])); j++ {
 			}
-			// if empty bad!
 			r, err := strconv.ParseUint(escaped[i:j], 16, 64)
 			if err != nil {
 				panic(err)

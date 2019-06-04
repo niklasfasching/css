@@ -13,8 +13,7 @@ var escapeTests = []escapeTest{
 	{"#foo.bar", "\\#foo\\.bar", "#foo.bar"},
 	{"\000", "\uFFFD", "\uFFFD"},
 	{"abc\000def", "abc\uFFFDdef", "abc\uFFFDdef"},
-
-	// {"\\ \"", "\\\\ \\\"", "\\\\ \\\""}, // TODO
+	{"\\ \"", "\\\\\\ \\\"", "\\\\ \\\""},
 }
 
 func TestEscape(t *testing.T) {
