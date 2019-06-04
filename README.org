@@ -51,18 +51,14 @@ func main() {
 #+end_src
 
 ** but why?
-for fun - don't use this!
+for fun
 
 - It seemed easy enough to do
 - I've been really into writing parsers lately and this felt a belt more complicated than a lisp
 - I enjoy web scraping and wanted to learn more about underlying concepts
 - I wanted to learn more about profiling go - and this seemed like a good playground
+- The existing css libraries cannot be extended / customized
 
-* todo
-- escape handling (string/ident)
-  - https://github.com/mathiasbynens/CSS.escape/blob/master/tests/tests.js
-  - https://www.w3.org/International/questions/qa-escapes
-  - https://mathiasbynens.be/notes/css-escapes
 * resources
 - https://github.com/andybalholm/cascadia
 - https://github.com/ericchiang/css
