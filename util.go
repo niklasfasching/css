@@ -138,7 +138,7 @@ func includeMatch(value, sValue string) bool {
 }
 
 func contains(substring string) (func(*html.Node) bool, error) {
-	if substring[0] == '"' && substring[len(substring)-1] == '"' {
+	if substring != "" && substring[0] == '"' && substring[len(substring)-1] == '"' {
 		substring = substring[1 : len(substring)-1]
 	}
 	return func(n *html.Node) bool {
